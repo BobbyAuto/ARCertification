@@ -22,18 +22,24 @@ $(document).ready(function(){
             .replace(/\s/g, '');
             
             $("#publicKey").val(publicKeyBase64)
-            //alert($("#publicKey").val());
-
-            $("#btn").click(function () {
+            var message =  $("#msg").val();
+            var signature = signMessage(privateKey, message);
+            $("#sign").val(signature);
+            
+            /* verify the signature here */
+            //var isvalid = verifySignature(publicKey, message, signature);
+            
+            $("#login").click(function() {
             	
-            	var message =  $("#msg").val();
-                var signature = signMessage(privateKey, message);
-                $("#sign").val(signature);
-                
-                var isvalid = verifySignature(publicKey, message, signature);
-                alert(isvalid)
-
-            });
+            	var username = $("#username").val();
+            	var password = $("#password").val();
+            	
+            	var loginForm = $("#loginForm");
+            	loginForm.attr("action", "${pageContext.request.contextPath }/lecturerLogin");
+            	loginForm.submit();
+            	
+            })
+            
         });
     </script>
 
@@ -44,7 +50,7 @@ $(document).ready(function(){
 <body>
 	<h1 style="width:100%; margin-top:200px; text-align:center;">Please Login Here</h1>
 	<div style="width:100%; height:auto; display: flex; justify-content: center; align-items: center;">
-		<form action="" method="post">
+		<form id="loginForm" action="" method="post">
 			<div style="width:100%; height: 35px; ">
 				<div style="width:80px; height:35px; text-align: left; float: left; line-height: 35px; font-size:16px;">Username: </div>
 				<div style="float: left;">
@@ -60,8 +66,13 @@ $(document).ready(function(){
 			
 			<div style="width:330px; height: 35px;  margin-top:28px; display: flex; justify-content: right; align-items: right;">
 				
-				<button style="width: 100px; height:35px; font-size:15px;">Login</button>
+				<button id="login" style="width: 100px; height:35px; font-size:15px;">Login</button>
 			</div>
+			
+			<!-- hidden field to store the lecturer's signature -->
+			<input id="msg" type="hidden" name="msg" value="publish"/>
+			<input id="sign" type="hidden" name="sign", value="testsign">
+			<input id="publicKey" type="hidden" name="publicKey", value="">
 		</form>
 	
 		<%-- <form action="${pageContext.request.contextPath }/test" method="post">

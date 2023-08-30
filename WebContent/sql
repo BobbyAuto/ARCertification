@@ -1,0 +1,9 @@
+CREATE TABLE Lecturer (
+    lecturerID INT AUTO_INCREMENT PRIMARY KEY,
+    fullName VARCHAR(50) NOT NULL,
+    nickName VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
+
+insert into Lecturer(fullName, nickName, password) values("Bob", "Bob", "Bob123");
+insert into Lecturer(fullName, nickName, password) values("Alice", "Alice", "Alice123");
