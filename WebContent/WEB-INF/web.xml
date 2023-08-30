@@ -9,7 +9,17 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>lecturerLogin</servlet-name>
-    <url-pattern>/lecturerLogin</url-pattern>
+    <url-pattern>/lecturerLogin</url-pattern> 
+  </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>publishMarksServlet</servlet-name>
+    <servlet-class>com.servlet.PublishMarksServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>publishMarksServlet</servlet-name>
+    <url-pattern>/publishMarksServlet</url-pattern>
   </servlet-mapping>
   
   

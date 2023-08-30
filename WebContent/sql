@@ -7,3 +7,24 @@ CREATE TABLE Lecturer (
 
 insert into Lecturer(fullName, nickName, password) values("Bob", "Bob", "Bob123");
 insert into Lecturer(fullName, nickName, password) values("Alice", "Alice", "Alice123");
+
+
+CREATE TABLE Subject (
+    subjectID INT AUTO_INCREMENT PRIMARY KEY,
+    subjectName VARCHAR(50) NOT NULL,
+    subjectCode VARCHAR(50) NOT NULL
+);
+insert into Subject(subjectName, subjectCode) values("Applied Blockchains and Cryptocurrencies 2023 S2", "COMP842");
+insert into Subject(subjectName, subjectCode) values("Artificial Intelligence 2023 S2", "COMP813");
+
+/* The relationship table between lecturer and course */
+CREATE TABLE SubjectAndLecturer (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    lecturerID INT NOT NULL,
+    subjectID INT NOT NULL
+);
+insert into SubjectAndLecturer(lecturerID, subjectID) values(1, 1);
+insert into SubjectAndLecturer(lecturerID, subjectID) values(1, 2);
+insert into SubjectAndLecturer(lecturerID, subjectID) values(2, 2);
+
+

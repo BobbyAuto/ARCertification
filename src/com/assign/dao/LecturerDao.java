@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.assign.entites.Lecturer;
-import com.assign.entites.Student;
 import com.assign.jdbc.JDBC;
 
 public class LecturerDao {
