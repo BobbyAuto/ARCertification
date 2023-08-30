@@ -50,7 +50,7 @@ public class ServletTest extends HttpServlet {
 		String msg = (String) request.getParameter("msg"); 
 		String sign = (String) request.getParameter("sign"); 
 		String publicKeyString = (String)request.getParameter("publicKey");
-		///String publicKeyString = "MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgHO8lxrizZisNpk6UFlcBk5wXD0AQcOOEDgCKtWo60oYHgU5WtNV7IxwGnDqDlGEoSEGYnpgWxljmVI/Jhfs9UK1jjOkZHgs6ajJffNLitC/E0EOqQ/WBimJF0RV0yWpvGzSXmc1J151xhag4pxK+QK1j+RNGbHLVeS7vkwuk+CvAgMBAAE=";
+		
 		
 		System.out.println("msg = " + msg);
 		System.out.println("sign = " + sign);
