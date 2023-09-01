@@ -24,10 +24,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.assign.dao.BQuery;
 import com.assign.dao.LecturerDao;
+import com.assign.dao.StudentAndSubjectDao;
 import com.assign.dao.SubjectsDao;
 import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
+import com.assign.entites.StudentAndSubject;
 import com.assign.entites.Subject;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * Servlet implementation class StudentAndSubjectServlet
@@ -51,22 +56,32 @@ public class StudentAndSubjectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		
 		
-		String subjectID = request.getParameter("subjectID"); 
+		int subjectID = Integer.parseInt(request.getParameter("subjectID")); 
 		
 		System.out.println("======== PublishMarksServlet ======== ");
 		System.out.println("subjectID = " + subjectID);
 
 		((ServletResponse) resp).setContentType("application/json;charset=UTF-8");
-//		设置响应类型及编码格式为json文件格式
 		
-//		{"code":0,"msg":"用户名或密码不能为空！"}
-//		得到输出流
+		StudentAndSubjectDao sasd = new StudentAndSubjectDao();
+		ArrayList<StudentAndSubject> sasArray = sasd.getSubjectStudents(subjectID);
+		
+//		System.out.println("size = " + sasArray.size());
+ 
+		JSONArray jsonArray = new JSONArray();   
+   
+		for (StudentAndSubject sas : sasArray) {
+		    JSONObject jsonObject = new JSONObject();
+		    jsonObject.put("fullName", sas.getFullName());
+		    jsonObject.put("studentID", sas.getStudentID());
+		    
+		    jsonArray.add(jsonObject);
+		   
+		}   
+
 		PrintWriter out = resp.getWriter();
-//		输出结果
-		out.write("{\"code\":1,\"msg\":\"success\"}");
-		
-		out.close();
-		return;
+	    out.print(jsonArray.toString());
+	    out.flush();
 
 	}
 

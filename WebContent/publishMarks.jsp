@@ -25,17 +25,15 @@
 		$.ajax({
 			  url: "${pageContext.request.contextPath }/studentAndSubjectServlet",
 			  type: "POST",
-			  //dataType: "JSON",
+			  dataType: "JSON",
 			  data: {
 				  subjectID: subjectID
 				  },
-			  success: function(result) {
-				  if(result.code == 1){
-    				  $("#msg").html(result.msg);
-    			  }
-    			  else{
-    				  $("#msg").html(result.msg);
-    			  }
+			  success: function(data) {
+					  $("#result").empty(); // Clear any previous results
+	                  $.each(data, function(index, sas) {
+	                      $("#result").append("<p>studentID: " + sas.studentID + ", fullName: " + sas.fullName + "</p>");
+	                  });
 			  },
 			  error: function(xhr, status, error) {
 			    alert("error!");
@@ -65,6 +63,9 @@
 		</select>
 	</div>
 </div>
-<div id="msg"></div>
+<div id="result"></div>
+
+
+
 </body>
 </html>

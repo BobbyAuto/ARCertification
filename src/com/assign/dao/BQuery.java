@@ -28,10 +28,10 @@ public class BQuery {
 			while (resultSet.next()) {
 				
 				Student student = new Student();
-				student.setId(resultSet.getInt("id"));
-				student.setName(resultSet.getString("name"));
+				student.setStudentID(resultSet.getInt("studentID"));
+				student.setFullName(resultSet.getString("fullName"));
 				
-				student.setSubject_ids(resultSet.getString("subject_ids"));
+//				student.setSubject_ids(resultSet.getString("subject_ids"));
 
 				students.add(student);
 			}

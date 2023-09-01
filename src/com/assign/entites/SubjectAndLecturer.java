@@ -17,6 +17,4 @@ public class SubjectAndLecturer {
 		this.subjectID = subjectID;
 	}
 	
-	
-	
 }
