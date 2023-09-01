@@ -22,6 +22,14 @@
     <url-pattern>/publishMarksServlet</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>studentAndSubjectServlet</servlet-name>
+    <servlet-class>com.servlet.StudentAndSubjectServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>studentAndSubjectServlet</servlet-name>
+    <url-pattern>/studentAndSubjectServlet</url-pattern>
+  </servlet-mapping>
   
   
   <welcome-file-list>

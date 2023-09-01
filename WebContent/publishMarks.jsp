@@ -20,19 +20,25 @@
 	
 	function queryStudents(e) {
 		subjectID = e.value;
-		//alert(subjectID);
 		
 		// Get all the students who have regesited this subject.
 		$.ajax({
-			  url: "",
-			  method: "post",
-			  //dataType: "",
-			  data: "subjectID = " + subjectID,
-			  success: function(response) {
-			    console.log(response);
+			  url: "${pageContext.request.contextPath }/studentAndSubjectServlet",
+			  type: "POST",
+			  //dataType: "JSON",
+			  data: {
+				  subjectID: subjectID
+				  },
+			  success: function(result) {
+				  if(result.code == 1){
+    				  $("#msg").html(result.msg);
+    			  }
+    			  else{
+    				  $("#msg").html(result.msg);
+    			  }
 			  },
 			  error: function(xhr, status, error) {
-			    console.error(error);
+			    alert("error!");
 			  }
 			});
 	}
@@ -59,6 +65,6 @@
 		</select>
 	</div>
 </div>
-
+<div id="msg"></div>
 </body>
 </html>

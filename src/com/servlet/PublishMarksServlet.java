@@ -65,6 +65,8 @@ public class PublishMarksServlet extends HttpServlet {
 		ArrayList<Subject> subjects = sd.getLecturerSubjects(lecturerID); 
 		request.setAttribute("subjects", subjects);
 		
+		
+		
 		request.getRequestDispatcher("/publishMarks.jsp").forward(request, resp);
 		
 //		byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);

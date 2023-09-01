@@ -2,36 +2,43 @@ package com.assign.entites;
 
 public class Student {
 
-	private Integer id;
-	private String name;
-	private String subject_ids;
-
-	public String getSubject_ids() {
-		return subject_ids;
-	}
-
-	public void setSubject_ids(String subject_ids) {
-		this.subject_ids = subject_ids;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
+	private Integer studentID;
+	private String fullName;
+	private String nickName;
+	private String password;
+	public int latestVersion;
 	
-
 	
+	public Integer getStudentID() {
+		return studentID;
+	}
+	public void setStudentID(Integer studentID) {
+		this.studentID = studentID;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public int getLatestVersion() {
+		return latestVersion;
+	}
+	public void setLatestVersion(int latestVersion) {
+		this.latestVersion = latestVersion;
+	}
+
 
 }
