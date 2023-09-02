@@ -74,6 +74,7 @@ public class StudentAndSubjectServlet extends HttpServlet {
 		    JSONObject jsonObject = new JSONObject();
 		    jsonObject.put("fullName", sas.getFullName());
 		    jsonObject.put("studentID", sas.getStudentID());
+		    jsonObject.put("score", sas.getScore());
 		    
 		    jsonArray.add(jsonObject);
 		   
@@ -82,7 +83,6 @@ public class StudentAndSubjectServlet extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 	    out.print(jsonArray.toString());
 	    out.flush();
-
 	}
 
 	/**
