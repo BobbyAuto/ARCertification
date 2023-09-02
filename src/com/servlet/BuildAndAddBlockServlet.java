@@ -52,13 +52,11 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		int lecturerID = Integer.parseInt(request.getParameter("lecturerID"));
 		int studentID = Integer.parseInt(request.getParameter("studentID"));
 		int subjectID = Integer.parseInt(request.getParameter("subjectID"));
+		float score = Float.parseFloat(request.getParameter("score"));
 		
 		System.out.println("======== BuildAndAddBlockServlet ======== ");
-		System.out.println("studentID = " + studentID);
-		
-		
-		//request.getRequestDispatcher("/PublishMarksServlet").forward(request, resp);
-		
+		System.out.println("score = " + score);
+				
 		PrintWriter out = resp.getWriter();
 	    out.print("{\"msg\":success}");
 	    out.flush();

@@ -38,6 +38,8 @@ public class VerifySignatureServlet extends HttpServlet {
 		int lecturerID = Integer.parseInt(request.getParameter("lecturerID"));
 		
 		System.out.println("======== VerifySignatureServlet ======== ");
+		System.out.println("message = " + message);
+		System.out.println("signature = " + signature);
 		
 		Security se = new Security(lecturerID);
 		

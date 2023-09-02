@@ -58,7 +58,7 @@
 			if (!isNaN(numericMark) && numericMark >= 1 && numericMark <= 100) {
 				var lecturerID = ${lecturerID};
 	            var privateKey = ""; 
-	            var message = studentID + "-" + subjectID + "-" + lecturerID;
+	            var message = studentID + "-" + subjectID + "-" + lecturerID + "-" + numericMark;
 	            var signature = signMessage(privateKey, message);
 				
 				$.ajax({
@@ -69,6 +69,7 @@
 						  subjectID: subjectID,
 						  studentID: studentID,
 						  lecturerID: lecturerID,
+						  score: numericMark,
 						  message: message,
 						  signature: signature
 						  },
