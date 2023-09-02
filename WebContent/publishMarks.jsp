@@ -32,15 +32,12 @@
 			  success: function(data) {
 				  	var tbody = $('#studentsList tbody'); 
 				  	tbody.empty(); // Clear any previous results
-					  //$("#result").append("<table><tr><th>studentID</th><th>fullName</th><th>Operation</th></tr>");
 	                  $.each(data, function(index, sas) {
-	                	 // $("#result").append("<tr></tr>");
-	                      //$("#result").append("<p>studentID: " + sas.studentID + ", fullName: " + sas.fullName + "</p>");
 	                      var scoreColumn = "";
 	                      markColumn = "";
 	                      if (sas.score == "-1") {
 	                    	  scoreColumn = "<td>Waiting for Mark</td>"
-	                    		  markColumn = "<td><a href='#'>go to mark</a></td>";
+	                    		  markColumn = "<td><a href='#' onclick=goMark(" + sas.studentID + "," + subjectID + ")>go to mark</a></td>";
 	                      } else {
 	                    	  scoreColumn = "<td style='color: green'>" + sas.score + "</td>";
 	                    	  markColumn = "<td><a href='#'>modify the mark</a></td>";
@@ -53,11 +50,49 @@
 			  }
 			});
 	}
+	
+	function goMark(studentID, subjectID) {
+		var mark=prompt("Give a mark here","");
+		if (mark!=null && mark!="") {
+			var numericMark = parseFloat(mark);
+			if (!isNaN(numericMark) && numericMark >= 1 && numericMark <= 100) {
+				var lecturerID = ${lecturerID};
+	            var privateKey = ""; 
+	            var message = studentID + "-" + subjectID + "-" + lecturerID;
+	            var signature = signMessage(privateKey, message);
+				
+				$.ajax({
+					url: "${pageContext.request.contextPath }/verifySignatureServlet",
+					  type: "POST",
+					  //dataType: "JSON",
+					  data: {
+						  subjectID: subjectID,
+						  studentID: studentID,
+						  lecturerID: lecturerID,
+						  message: message,
+						  signature: signature
+						  },
+					  success: function(data) {
+						  alert("success!");
+					  },
+					  error: function(xhr, status, error) {
+						  alert("error");
+					  }
+				});
+				
+			} else {
+				alert("Please give a valid score!");	
+			}
+
+		}
+
+
+	}
 
 </script>
 </head>
 <body>
-<div class="fullName">  Hey, ${fullName}!</div>
+<div class="fullName">  Hey, ${fullName} ! ${lecturerID}</div>
 <hr />
 <div> 
 	<div class="subText">Subject: </div>

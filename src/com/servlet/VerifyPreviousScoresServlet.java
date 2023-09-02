@@ -23,22 +23,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.assign.dao.BQuery;
 import com.assign.dao.LecturerDao;
-import com.assign.dao.SubjectsDao;
+import com.assign.dao.Security;
 import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
-import com.assign.entites.Subject;
 
 /**
- * Servlet implementation class PublishMarksServlet
+ * Servlet implementation class LecturerLoginServlet
  */
-@WebServlet("/PublishMarksServlet")
-public class PublishMarksServlet extends HttpServlet {
+@WebServlet("/VerifyPreviousScoresServlet")
+public class VerifyPreviousScoresServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public PublishMarksServlet() {
+	public VerifyPreviousScoresServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -49,17 +48,17 @@ public class PublishMarksServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		
-		Integer lecturerID = (Integer) request.getAttribute("lecturerID"); 
-		String fullName = (String) request.getAttribute("fullName");
 		
-		System.out.println("======== PublishMarksServlet ======== ");
-
-		SubjectsDao sd = new SubjectsDao();
-		ArrayList<Subject> subjects = sd.getLecturerSubjects(lecturerID); 
-		request.setAttribute("subjects", subjects);
+		int lecturerID = Integer.parseInt(request.getParameter("lecturerID"));
+		int studentID = Integer.parseInt(request.getParameter("studentID"));
+		int subjectID = Integer.parseInt(request.getParameter("subjectID"));
 		
-		request.getRequestDispatcher("/publishMarks.jsp").forward(request, resp);
-
+		System.out.println("======== VerifyPreviousScoresServlet ======== ");
+		System.out.println("studentID = " + studentID);
+		
+		
+		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+		
 	}
 
 	/**
@@ -71,5 +70,7 @@ public class PublishMarksServlet extends HttpServlet {
 		
 		this.doGet(request, response);
 	}
+	
+	
 
 }

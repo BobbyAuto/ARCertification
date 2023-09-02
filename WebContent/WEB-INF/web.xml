@@ -32,6 +32,33 @@
   </servlet-mapping>
   
   
+  <servlet>
+    <servlet-name>VerifySignatureServlet</servlet-name>
+    <servlet-class>com.servlet.VerifySignatureServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VerifySignatureServlet</servlet-name>
+    <url-pattern>/verifySignatureServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>VerifyPreviousScoresServlet</servlet-name>
+    <servlet-class>com.servlet.VerifyPreviousScoresServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VerifyPreviousScoresServlet</servlet-name>
+    <url-pattern>/verifyPreviousScoresServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>BuildAndAddBlockServlet</servlet-name>
+    <servlet-class>com.servlet.BuildAndAddBlockServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BuildAndAddBlockServlet</servlet-name>
+    <url-pattern>/buildAndAddBlockServlet</url-pattern>
+  </servlet-mapping>
+  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
