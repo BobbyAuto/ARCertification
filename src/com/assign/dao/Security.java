@@ -31,6 +31,7 @@ public class Security {
 		return isValid;
 	}
 	
+	
 	/**
 	 * Get a lecturer's public key.
 	 * @return
