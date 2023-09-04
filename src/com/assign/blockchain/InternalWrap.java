@@ -52,5 +52,18 @@ public class InternalWrap implements Serializable{
 		this.score = score;
 	}
 	
+	@Override
+	public String toString() {
+		return this.studentName + "-" + this.subjectText + "-" + this.score;
+	}
+	
+	public static void main(String[] args) {
+		InternalWrap inw = new InternalWrap();
+		inw.setStudentName("jeckshon");
+		inw.setSubjectText("Big Data Application");
+		inw.setScore(85);
+		
+		System.out.println(inw);
+	}
 	
 }

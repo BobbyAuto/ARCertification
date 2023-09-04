@@ -4,7 +4,7 @@
   
   <!-- Initialize a Map Container, when the server starts. -->
   <listener>
-        <listener-class>com.servlet.YearMapContainerInitializer</listener-class>
+        <listener-class>com.servlet.BlockContainerInitializer</listener-class>
     </listener>
   
   <servlet>

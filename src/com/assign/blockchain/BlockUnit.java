@@ -1,17 +1,26 @@
 package com.assign.blockchain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * a block unit
  */
-public class BlockUnit {
+public class BlockUnit implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int studentID;
 	private int subjectID;
 	private ArrayList<InternalWrap> subjectChildren = new ArrayList<InternalWrap>(); // store all subject which was marked and already belonged to a block.
 	private String blockHash;
 	private String previousHash;
+	private int latestVersion;
 	
+	public int getLatestVersion() {
+		return latestVersion;
+	}
+	public void setLatestVersion(int latestVersion) {
+		this.latestVersion = latestVersion;
+	}
 	public int getStudentID() {
 		return studentID;
 	}

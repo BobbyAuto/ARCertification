@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import com.assign.dao.BQuery;
 import com.assign.dao.HashObjectWithSHA256;
 import com.assign.dao.LecturerDao;
 import com.assign.dao.Security;
+import com.assign.dao.StudentDao;
 import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
 
@@ -54,7 +56,6 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		
-		
 		int lecturerID = Integer.parseInt(request.getParameter("lecturerID"));
 		int studentID = Integer.parseInt(request.getParameter("studentID"));
 		String studentName = request.getParameter("studentName");
@@ -62,6 +63,10 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		String subjectText = request.getParameter("subjectText");
 		
 		float score = Float.parseFloat(request.getParameter("score"));
+		
+		StudentDao sd = new StudentDao();
+		int latestVersion = sd.getLatestVersion(studentID);
+		int newVersion = latestVersion + 1;
 		
 		System.out.println("======== BuildAndAddBlockServlet ======== ");
 		System.out.println("studentID = " + studentID);
@@ -74,26 +79,73 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		interW.setSubjectText(subjectText);
 		interW.setScore(score);
 		
-		// Hash SHA-256
-		HashObjectWithSHA256 hos = new HashObjectWithSHA256(interW);
-		String hashString = hos.getHash();
-		
 		BlockUnit bu = new BlockUnit();
 		bu.setStudentID(studentID);
 		bu.setSubjectID(subjectID);
-		bu.setBlockHash(hashString);
-		bu.getSubjectChildren().add(interW);
+		bu.setLatestVersion(newVersion);
 		
-		interW.setDirectParent(bu); // belong to a block parent.
-		
-		System.out.println("chain studentID = " + bu.getSubjectChildren().get(0).getDirectParent().getStudentID());
-		
+		interW.setDirectParent(bu); // belong to a block parent.		
 		
 		ServletContext servletContext = getServletContext();
-		HashMap ymc = (HashMap) servletContext.getAttribute("yearMapContainer");
-		ymc.put("2023", "test map container");
-		System.out.println(ymc.get("2023"));
-		
+		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
+        
+        if(blockContainer.isEmpty()) {
+        	// Hash the current subject.
+    		HashObjectWithSHA256 hos = new HashObjectWithSHA256(interW);
+    		String hashString = hos.getHash();
+    		bu.setBlockHash(hashString);
+    		bu.getSubjectChildren().add(interW);
+    		
+    		blockContainer.add(bu);
+    		sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
+        } else { 
+        	boolean isFoundSame = false;
+        	// find the latest block of the same Student
+        	for(BlockUnit pastBu : blockContainer) {
+        		if(pastBu.getStudentID() == studentID && pastBu.getLatestVersion() == latestVersion) {
+        			bu.getSubjectChildren().addAll(pastBu.getSubjectChildren());
+        			bu.getSubjectChildren().add(interW);
+        			
+        			ArrayList<InternalWrap> subjectChildren = bu.getSubjectChildren();
+        			// Hash all subjects, which are in previous block, together.
+            		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
+            		String hashString = hos.getHash();
+            		bu.setBlockHash(hashString);   
+            		
+            		isFoundSame = true;
+            		break;
+        		}
+        	}
+        	if(isFoundSame == true) {
+        		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
+            	bu.setPreviousHash(lastBlock.getBlockHash());
+            	
+            	blockContainer.add(bu);            	
+            	sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
+        	} else { // A new Student who had never been added into the block.
+        		// Hash the current subject.
+        		HashObjectWithSHA256 hos = new HashObjectWithSHA256(interW);
+        		String hashString = hos.getHash();
+        		bu.setBlockHash(hashString);
+        		bu.getSubjectChildren().add(interW);
+        		
+        		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
+            	bu.setPreviousHash(lastBlock.getBlockHash());
+            	
+        		blockContainer.add(bu);
+        		sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
+        	}
+        	
+        }        
+        
+        /* validation here start */
+        System.out.println("------------- here is validation ----------------");
+        BlockUnit lastBlockValidate = blockContainer.get(blockContainer.size()-1);
+        ArrayList<InternalWrap> children = lastBlockValidate.getSubjectChildren();
+        for(InternalWrap inw : children) {
+        	System.out.println(inw);
+        }
+        System.out.println(" ");
 				
 		PrintWriter out = resp.getWriter();
 	    out.print("{\"msg\":success}");

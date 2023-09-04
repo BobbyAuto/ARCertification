@@ -1,5 +1,6 @@
 package com.servlet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +8,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-public class YearMapContainerInitializer implements ServletContextListener {
+import com.assign.blockchain.BlockUnit;
+
+public class BlockContainerInitializer implements ServletContextListener {
 	
 	/**
 	 * // This method is called when the web application starts.
@@ -18,8 +21,8 @@ public class YearMapContainerInitializer implements ServletContextListener {
         ServletContext servletContext = sce.getServletContext();
 
         // Create and initialize your map here
-        Map yearMapContainer = new HashMap();
-        servletContext.setAttribute("yearMapContainer", yearMapContainer);
+        ArrayList<BlockUnit> blockContainer = new ArrayList<BlockUnit>();
+        servletContext.setAttribute("blockContainer", blockContainer);
     }
 
 	/**

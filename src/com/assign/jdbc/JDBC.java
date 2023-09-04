@@ -37,15 +37,11 @@ public class JDBC {
 		Statement statement = null;
 		try {
 			statement = JDBC.getConnection().createStatement();
-			
-			
-			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		return statement;
-		
 	}
 	
 	public static void close(Connection conn, PreparedStatement ps) {
