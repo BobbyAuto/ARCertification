@@ -50,7 +50,7 @@ public class HashObjectWithSHA256 {
 			}
 			hashString = hexString.toString();
 
-			System.out.println("SHA-256 Hash: " + hashString);
+			//System.out.println("SHA-256 Hash: " + hashString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

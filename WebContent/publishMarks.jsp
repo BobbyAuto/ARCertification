@@ -18,8 +18,13 @@
 <script src="${pageContext.request.contextPath }/js/Tools.js"></script>
 <script type="text/javascript">
 	
+	var subjectText = ""; 
+	
 	function queryStudents(e) {
 		subjectID = e.value;
+		
+		var selectedOption = e.options[e.selectedIndex];
+		subjectText = selectedOption.textContent;
 		
 		// Get all the students who have regesited this subject.
 		$.ajax({
@@ -35,9 +40,11 @@
 	                  $.each(data, function(index, sas) {
 	                      var scoreColumn = "";
 	                      markColumn = "";
+	                      var idValue = sas.fullName + "-" + sas.studentID; //Store student name into id property.
 	                      if (sas.score == "-1") {
 	                    	  scoreColumn = "<td>Waiting for Mark</td>"
-	                    		  markColumn = "<td><a href='#' onclick=goMark(" + sas.studentID + "," + subjectID + ")>go to mark</a></td>";
+	                    	  markColumn = "<td><a id='" + idValue + "' href='#' onclick=goMark(this," + sas.studentID + "," + subjectID + ")>go to mark</a></td>";
+	                      		//alert(markColumn);
 	                      } else {
 	                    	  scoreColumn = "<td style='color: green'>" + sas.score + "</td>";
 	                    	  markColumn = "<td><a href='#'>modify the mark</a></td>";
@@ -51,7 +58,10 @@
 			});
 	}
 	
-	function goMark(studentID, subjectID) {
+	function goMark(e, studentID, subjectID) {
+		
+		var studentName = e.id.split("-")[0]; // get studentName from id value of <a> element.
+		
 		var mark=prompt("Give a mark here","");
 		if (mark!=null && mark!="") {
 			var numericMark = parseFloat(mark);
@@ -67,7 +77,9 @@
 					  //dataType: "JSON",
 					  data: {
 						  subjectID: subjectID,
+						  subjectText: subjectText,
 						  studentID: studentID,
+						  studentName: studentName,
 						  lecturerID: lecturerID,
 						  score: numericMark,
 						  message: message,
