@@ -41,13 +41,16 @@
 	                      var scoreColumn = "";
 	                      markColumn = "";
 	                      var idValue = sas.fullName + "-" + sas.studentID; //Store student name into id property.
+	                      var idValue_score = sas.studentID + "-" + subjectID;
+	                      var idValue_operation = sas.studentID + "-" + subjectID + "-o";
 	                      if (sas.score == "-1") {
-	                    	  scoreColumn = "<td>Waiting for Mark</td>"
-	                    	  markColumn = "<td><a id='" + idValue + "' href='#' onclick=goMark(this," + sas.studentID + "," + subjectID + ")>go to mark</a></td>";
+	                    	  scoreColumn = "<td id='" + idValue_score + "'>Waiting for Mark</td>"
+	                    	  //alert(scoreColumn);
+	                    	  markColumn = "<td id='" + idValue_operation + "'><a id='" + idValue + "' href='#' onclick=goMark(this," + sas.studentID + "," + subjectID + ")>go to mark</a></td>";
 	                      		//alert(markColumn);
 	                      } else {
 	                    	  scoreColumn = "<td style='color: green'>" + sas.score + "</td>";
-	                    	  markColumn = "<td><a href='#'>modify the mark</a></td>";
+	                    	  markColumn = "<td style='color: gray'>MARKED!</td>";
 	                      }
 	                      tbody.append("<tr><td>" + sas.studentID + "</td><td>" + sas.fullName + "</td>" + scoreColumn + markColumn + "</tr>");
 	                  });
@@ -87,6 +90,14 @@
 						  },
 					  success: function(data) {
 						  alert("success!");
+						  var idValue_score = "#" + studentID + "-" + subjectID;
+						  $(idValue_score).text(numericMark);
+						  $(idValue_score).css("color", "green");
+						  
+						  var idValue_operation = "#" + studentID + "-" + subjectID + "-o";
+						  $(idValue_operation).text("MARKED!");
+						  $(idValue_operation).css("color", "gray");
+						  
 					  },
 					  error: function(xhr, status, error) {
 						  alert("error");

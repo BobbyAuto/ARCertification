@@ -1,6 +1,7 @@
 package com.assign.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -74,4 +75,39 @@ public class StudentAndSubjectDao {
 		return stuArray;
 	}
 	
+	/**
+	 * Update the subject score of the student by sutdentID and subjectID.
+	 * @param studentID
+	 * @param subjectID
+	 */
+	public void updateScore(int studentID, int subjectID, float score) {
+		String sql = "update StudentAndSubject set score = ? where studentID = ? and subjectID = ?";
+		PreparedStatement prepStatement = null;
+		Connection connection = null;
+		try {
+			connection = JDBC.getConnection();
+			prepStatement = connection.prepareStatement(sql);
+			prepStatement.setFloat(1, score);
+			prepStatement.setInt(2, studentID);
+			prepStatement.setInt(3, subjectID);
+			prepStatement.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (prepStatement != null) {
+					prepStatement.close();
+				}
+
+				if (connection != null) {
+					connection.close();
+					connection = null;
+				}
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
 }

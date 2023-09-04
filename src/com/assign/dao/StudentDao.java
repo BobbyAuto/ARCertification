@@ -66,9 +66,11 @@ public class StudentDao {
 	public void updateLatestVersion(int studentID, int latestVersion) {
 		
 		String sql = "update Student set latestVersion = ? where studentID = ?";
-		
+		PreparedStatement prepStatement = null;
+		Connection connection = null;
 		try {
-			PreparedStatement prepStatement = JDBC.getConnection().prepareStatement(sql);
+			connection = JDBC.getConnection();
+			prepStatement = connection.prepareStatement(sql);
 			prepStatement.setInt(1, latestVersion);
 			prepStatement.setInt(2, studentID);
 			prepStatement.executeUpdate();
@@ -76,6 +78,20 @@ public class StudentDao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (prepStatement != null) {
+					prepStatement.close();
+				}
+
+				if (connection != null) {
+					connection.close();
+					connection = null;
+				}
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -24,7 +24,7 @@ CREATE TABLE SubjectAndLecturer (
 );
 insert into SubjectAndLecturer(lecturerID, subjectID) values(1, 1);
 insert into SubjectAndLecturer(lecturerID, subjectID) values(1, 2);
-insert into SubjectAndLecturer(lecturerID, subjectID) values(2, 2);
+insert into SubjectAndLecturer(lecturerID, subjectID) values(2, 3);
 
 
 CREATE TABLE Student (
@@ -60,5 +60,25 @@ insert into StudentAndSubject(studentID, subjectID) values(2, 2);
 insert into StudentAndSubject(studentID, subjectID) values(3, 2);
 
 
+insert into Subject(subjectName, subjectCode) values("Information Security 2023 S2", "COMP821");
+insert into Subject(subjectName, subjectCode) values("Software Architecture, 2023 S2", "COMP806");
+insert into Subject(subjectName, subjectCode) values("Human Computer Interaction 2023 S2", "COMP822");
 
+insert into SubjectAndLecturer(lecturerID, subjectID) values(2, 4);
+insert into SubjectAndLecturer(lecturerID, subjectID) values(2, 5);
+
+insert into StudentAndSubject(studentID, subjectID) values(1, 3);
+insert into StudentAndSubject(studentID, subjectID) values(2, 3);
+insert into StudentAndSubject(studentID, subjectID) values(3, 3);
+insert into StudentAndSubject(studentID, subjectID) values(1, 4);
+insert into StudentAndSubject(studentID, subjectID) values(2, 4);
+insert into StudentAndSubject(studentID, subjectID) values(3, 4);
+insert into StudentAndSubject(studentID, subjectID) values(1, 5);
+insert into StudentAndSubject(studentID, subjectID) values(2, 5);
+insert into StudentAndSubject(studentID, subjectID) values(3, 5);
+
+
+/** ----Data Cleaning---- **/
+update StudentAndSubject set score=-1;
+update student set latestVersion=0;
 
