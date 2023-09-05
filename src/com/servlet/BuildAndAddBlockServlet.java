@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.assign.blockchain.BlockUnit;
 import com.assign.blockchain.InternalWrap;
+import com.assign.blockchain.WriteBlockContainerToFile;
 import com.assign.dao.BQuery;
 import com.assign.dao.HashObjectWithSHA256;
 import com.assign.dao.LecturerDao;
@@ -98,10 +100,6 @@ public class BuildAndAddBlockServlet extends HttpServlet {
     		String hashString = hos.getHash();
     		bu.setBlockHash(hashString);
     		bu.getSubjectChildren().add(interW);
-    		
-    		blockContainer.add(bu);
-    		sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
-    		ssd.updateScore(studentID, subjectID, score); // update the subject score of the student in JDBC table
         } else { 
         	boolean isFoundSame = false;
         	// find the latest block of the same Student
@@ -123,10 +121,6 @@ public class BuildAndAddBlockServlet extends HttpServlet {
         	if(isFoundSame == true) {
         		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
             	bu.setPreviousHash(lastBlock.getBlockHash());
-            	
-            	blockContainer.add(bu);            	
-            	sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
-            	ssd.updateScore(studentID, subjectID, score); // update the subject score of the student in JDBC table
         	} else { 
         		// A new Student who had never been added into the block.
         		
@@ -138,12 +132,17 @@ public class BuildAndAddBlockServlet extends HttpServlet {
         		
         		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
             	bu.setPreviousHash(lastBlock.getBlockHash());
-            	
-        		blockContainer.add(bu);
-        		sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
-        		ssd.updateScore(studentID, subjectID, score); // update the subject score of the student in JDBC table
         	}
         }        
+        bu.setTimestampe(LocalDateTime.now()); // set the current system timestampe.
+        blockContainer.add(bu); // add new block to container.
+		sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
+		ssd.updateScore(studentID, subjectID, score); // update the subject score of the student in JDBC table
+		
+		/* save the block container into a file.*/
+		String contextPath = getServletContext().getRealPath("/");
+		WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath, blockContainer);
+		wbct.writeBlockContainer();
         
         /* validation here start */
         System.out.println("------------- here is validation ----------------");

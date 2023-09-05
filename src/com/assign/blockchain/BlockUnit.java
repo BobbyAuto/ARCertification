@@ -1,20 +1,38 @@
 package com.assign.blockchain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
  * a block unit
  */
 public class BlockUnit implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
+	
 	private int studentID;
 	private int subjectID;
 	private ArrayList<InternalWrap> subjectChildren = new ArrayList<InternalWrap>(); // store all subject which was marked and already belonged to a block.
 	private String blockHash;
 	private String previousHash;
 	private int latestVersion;
+	private String timestampe;
 	
+	public String getTimestampe() {
+		return timestampe;
+	}
+	public void setTimestampe(LocalDateTime dateTime) {
+		
+		LocalDateTime currentDateTime = dateTime;
+
+        // Define the date-time format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Format the current date and time using the formatter
+        this.timestampe = currentDateTime.format(formatter);		
+	}
 	public int getLatestVersion() {
 		return latestVersion;
 	}

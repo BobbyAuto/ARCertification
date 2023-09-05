@@ -7,10 +7,12 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.http.HttpServlet;
 
 import com.assign.blockchain.BlockUnit;
+import com.assign.blockchain.WriteBlockContainerToFile;
 
-public class BlockContainerInitializer implements ServletContextListener {
+public class BlockContainerInitializer extends HttpServlet implements ServletContextListener {
 	
 	/**
 	 * // This method is called when the web application starts.
@@ -19,9 +21,14 @@ public class BlockContainerInitializer implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         
         ServletContext servletContext = sce.getServletContext();
-
-        // Create and initialize your map here
-        ArrayList<BlockUnit> blockContainer = new ArrayList<BlockUnit>();
+        
+        String contextPath = "/Users/wangweichun/MyTomcat/webapps/ARCertification/";
+        WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath);
+        ArrayList<BlockUnit> blockContainer = wbct.readBlockContainer();
+        if (blockContainer == null) {
+        	blockContainer = new ArrayList<BlockUnit>();
+        }
+        
         servletContext.setAttribute("blockContainer", blockContainer);
     }
 
