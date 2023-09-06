@@ -89,6 +89,11 @@
 						  signature: signature
 						  },
 					  success: function(data) {
+						  
+						  if (data == 'falsified') {
+							  alert("Ohh, The student's scores of subjects have been falsified!");
+							  return;
+						  }
 						  alert("success!");
 						  var idValue_score = "#" + studentID + "-" + subjectID;
 						  $(idValue_score).text(numericMark);

@@ -15,20 +15,25 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Base64;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.assign.blockchain.BlockUnit;
+import com.assign.blockchain.InternalWrap;
 import com.assign.dao.BQuery;
+import com.assign.dao.HashObjectWithSHA256;
 import com.assign.dao.LecturerDao;
 import com.assign.dao.Security;
+import com.assign.dao.StudentDao;
 import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
 
 /**
- * Servlet implementation class LecturerLoginServlet
+ * Servlet implementation class VerifyPreviousScoresServlet
  */
 @WebServlet("/VerifyPreviousScoresServlet")
 public class VerifyPreviousScoresServlet extends HttpServlet {
@@ -53,12 +58,47 @@ public class VerifyPreviousScoresServlet extends HttpServlet {
 		int studentID = Integer.parseInt(request.getParameter("studentID"));
 		int subjectID = Integer.parseInt(request.getParameter("subjectID"));
 		
+		StudentDao sd = new StudentDao();
+		int latestVersion = sd.getLatestVersion(studentID);
+		
 		System.out.println("======== VerifyPreviousScoresServlet ======== ");
 		System.out.println("studentID = " + studentID);
 		
+		ServletContext servletContext = getServletContext();
+		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
 		
-		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
-		
+        if(blockContainer.isEmpty()) {
+        	request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+        } else {
+        	boolean isFoundSame = false;
+        	for(BlockUnit pastBu : blockContainer) {
+        		if(pastBu.getStudentID() == studentID && pastBu.getLatestVersion() == latestVersion) {
+        			isFoundSame = true;
+        			ArrayList<InternalWrap> subjectChildren = pastBu.getSubjectChildren();
+        			//System.out.println(subjectChildren.get(0));
+        			//System.out.println("size = " + subjectChildren.size());
+        			// Hash all subjects, which are in previous block, together.
+            		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
+            		String hashString = hos.getHash();
+            		
+            		if (pastBu.getBlockHash().equals(hashString)) {
+            			System.out.println("--------- Verify Previous Scores Passed! --------");
+                		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+            		} else {
+            			resp.setContentType("text/html; charset=utf-8");
+                		PrintWriter out = resp.getWriter();
+                	    out.print("falsified");
+                	    out.flush();
+                		return;
+            		}
+            		break;
+        		}
+        	}
+        	if (isFoundSame == false) {
+        		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+        	}
+        }
+
 	}
 
 	/**

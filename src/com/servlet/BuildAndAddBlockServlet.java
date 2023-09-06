@@ -72,7 +72,6 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		int newVersion = latestVersion + 1;
 		
 		System.out.println("======== BuildAndAddBlockServlet ======== ");
-		System.out.println("studentID = " + studentID);
 		
 		// internal data, which should be integrity and will be hashed.
 		InternalWrap interW = new InternalWrap();
@@ -86,20 +85,23 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		bu.setStudentID(studentID);
 		bu.setSubjectID(subjectID);
 		bu.setLatestVersion(newVersion);
+		bu.setTimestampe(LocalDateTime.now()); // set the current system timestampe.
 		
-		interW.setDirectParent(bu); // belong to a block parent.		
+		//interW.setDirectParent(bu); // belong to a block parent.		
+		
+		StudentAndSubjectDao ssd = new StudentAndSubjectDao();
 		
 		ServletContext servletContext = getServletContext();
 		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
-		
-		StudentAndSubjectDao ssd = new StudentAndSubjectDao();
-        
         if(blockContainer.isEmpty()) {
+        	bu.getSubjectChildren().add(interW);
         	// Hash the current subject.
-    		HashObjectWithSHA256 hos = new HashObjectWithSHA256(interW);
+        	ArrayList<InternalWrap> subjectChildren = bu.getSubjectChildren();
+    		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
     		String hashString = hos.getHash();
     		bu.setBlockHash(hashString);
-    		bu.getSubjectChildren().add(interW);
+    		//System.out.println(interW);
+    		
         } else { 
         	boolean isFoundSame = false;
         	// find the latest block of the same Student
@@ -123,18 +125,18 @@ public class BuildAndAddBlockServlet extends HttpServlet {
             	bu.setPreviousHash(lastBlock.getBlockHash());
         	} else { 
         		// A new Student who had never been added into the block.
-        		
-        		// Hash the current subject.
-        		HashObjectWithSHA256 hos = new HashObjectWithSHA256(interW);
+        		bu.getSubjectChildren().add(interW);
+            	// Hash the current subject.
+            	ArrayList<InternalWrap> subjectChildren = bu.getSubjectChildren();
+        		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
         		String hashString = hos.getHash();
         		bu.setBlockHash(hashString);
-        		bu.getSubjectChildren().add(interW);
         		
         		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
             	bu.setPreviousHash(lastBlock.getBlockHash());
         	}
         }        
-        bu.setTimestampe(LocalDateTime.now()); // set the current system timestampe.
+        
         blockContainer.add(bu); // add new block to container.
 		sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
 		ssd.updateScore(studentID, subjectID, score); // update the subject score of the student in JDBC table
@@ -150,11 +152,13 @@ public class BuildAndAddBlockServlet extends HttpServlet {
         ArrayList<InternalWrap> children = lastBlockValidate.getSubjectChildren();
         for(InternalWrap inw : children) {
         	System.out.println(inw);
+        	//System.out.println(inw.getDirectParent().getTimestampe());
         }
         System.out.println(" ");
-				
+		
+        resp.setContentType("text/html; charset=utf-8");
 		PrintWriter out = resp.getWriter();
-	    out.print("{\"msg\":success}");
+	    out.print("success");
 	    out.flush();
 		return;
 	}

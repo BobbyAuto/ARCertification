@@ -31,7 +31,7 @@ public class StudentAndSubjectDao {
 			String sql = "select s.studentID, s.fullName, ss.score, s.latestVersion from Student s "
 					+ "right join (select studentID, score from StudentAndSubject where subjectID = " + subjectID + ") as ss "
 					+ "on ss.studentID = s.studentID;";
-			System.out.println(sql);
+			//System.out.println(sql);
 			rs = statement.executeQuery(sql);
 			
 			while(rs.next()) {

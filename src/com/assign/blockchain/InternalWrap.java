@@ -11,15 +11,15 @@ public class InternalWrap implements Serializable{
 	private int subjectID;
 	private String subjectText;
 	private float score;
-	private BlockUnit directParent;
+	//private BlockUnit directParent;
 	
 	
-	public BlockUnit getDirectParent() {
-		return directParent;
-	}
-	public void setDirectParent(BlockUnit directParent) {
-		this.directParent = directParent;
-	}
+//	public BlockUnit getDirectParent() {
+//		return directParent;
+//	}
+//	public void setDirectParent(BlockUnit directParent) {
+//		this.directParent = directParent;
+//	}
 	public int getStudentID() {
 		return studentID;
 	}

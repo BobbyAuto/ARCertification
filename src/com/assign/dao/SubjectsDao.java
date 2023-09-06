@@ -29,7 +29,7 @@ public class SubjectsDao {
 					+ "from SubjectAndLecturer as sl left join Subject as su "
 					+ "on sl.subjectID = su.subjectID "
 					+ "where sl.lecturerID = " + lecturerID;
-			System.out.println(sql);
+			//System.out.println(sql);
 			rs = statement.executeQuery(sql);
 			
 			while(rs.next()) {

@@ -12,17 +12,19 @@ import javax.servlet.http.HttpServlet;
 import com.assign.blockchain.BlockUnit;
 import com.assign.blockchain.WriteBlockContainerToFile;
 
-public class BlockContainerInitializer extends HttpServlet implements ServletContextListener {
+public class BlockContainerInitializer implements ServletContextListener {
 	
 	/**
-	 * // This method is called when the web application starts.
+	 * Load the block data file when the web application starts.
 	 */
 	@Override
     public void contextInitialized(ServletContextEvent sce) {
         
         ServletContext servletContext = sce.getServletContext();
         
-        String contextPath = "/Users/wangweichun/MyTomcat/webapps/ARCertification/";
+        //String contextPath = "/Users/wangweichun/MyTomcat/webapps/ARCertification/";
+        String contextPath = servletContext.getRealPath("/");
+                
         WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath);
         ArrayList<BlockUnit> blockContainer = wbct.readBlockContainer();
         if (blockContainer == null) {

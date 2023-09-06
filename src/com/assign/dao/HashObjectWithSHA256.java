@@ -3,7 +3,12 @@ package com.assign.dao;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
+import com.assign.blockchain.BlockUnit;
+import com.assign.blockchain.InternalWrap;
+import com.assign.blockchain.WriteBlockContainerToFile;
 import com.assign.entites.Student;
 
 /**
@@ -59,16 +64,40 @@ public class HashObjectWithSHA256 {
 	}
 	
 	public static void main(String[] args) {
-		Student s = new Student();
-		s.setFullName("Weichun");
+		BlockUnit bu = new BlockUnit();
+		bu.setStudentID(1);
+		bu.setSubjectID(1);
+		bu.setTimestampe(LocalDateTime.now());
 		
-		HashObjectWithSHA256 hos = new HashObjectWithSHA256(s);
+		InternalWrap intw = new InternalWrap();
+		intw.setStudentID(1);
+		intw.setStudentName("weichun");
+		intw.setSubjectID(1);
+		intw.setScore(68);
+//		intw.setDirectParent(bu);
+		
+		bu.getSubjectChildren().add(intw);
+		
+		ArrayList<InternalWrap> children = bu.getSubjectChildren();
+		
+		
+		HashObjectWithSHA256 hos = new HashObjectWithSHA256(children);
 		String hashString = hos.getHash();
 		
-		Student s2 = new Student();
-		s2.setFullName("Weichun");
+		ArrayList<BlockUnit> blockContainer = new ArrayList<BlockUnit> ();
+		blockContainer.add(bu);
+		
+		String contextPath = "/Users/wangweichun/MyTomcat/webapps/ARCertification/";
+		WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath, blockContainer);
+		wbct.writeBlockContainer();
+		
+		
+		
+		ArrayList<BlockUnit> blockContainer2 = wbct.readBlockContainer();
+		ArrayList<InternalWrap> children2 = blockContainer2.get(0).getSubjectChildren();
+		
 		//s2.setLatestVersion(2);
-		HashObjectWithSHA256 hos2 = new HashObjectWithSHA256(s2);
+		HashObjectWithSHA256 hos2 = new HashObjectWithSHA256(children2);
 		String hashString2 = hos2.getHash();
 
 		

@@ -20,7 +20,7 @@ public class LecturerDao {
 		try {
 			statement = JDBC.getStatement();
 			String sql = "SELECT lecturerID, fullName, nickName, password FROM Lecturer where nickName = '" + nickName + "'";
-			System.out.println(sql);
+			//System.out.println(sql);
 			rs = statement.executeQuery(sql);
 			
 			while(rs.next()) {
