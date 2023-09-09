@@ -5,7 +5,25 @@
   <!-- Initialize a Map Container, when the server starts. -->
   <listener>
         <listener-class>com.servlet.BlockContainerInitializer</listener-class>
-    </listener>
+  </listener>
+    
+  <servlet>
+    <servlet-name>loginDispatcher</servlet-name>
+    <servlet-class>com.servlet.LoginDispatcherServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>loginDispatcher</servlet-name>
+    <url-pattern>/loginDispatcher</url-pattern> 
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>studentLogin</servlet-name>
+    <servlet-class>com.servlet.StudentLoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>studentLogin</servlet-name>
+    <url-pattern>/studentLogin</url-pattern> 
+  </servlet-mapping>
   
   <servlet>
     <servlet-name>lecturerLogin</servlet-name>

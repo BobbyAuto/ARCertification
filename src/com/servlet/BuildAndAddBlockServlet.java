@@ -145,16 +145,6 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		String contextPath = getServletContext().getRealPath("/");
 		WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath, blockContainer);
 		wbct.writeBlockContainer();
-        
-        /* validation here start */
-        System.out.println("------------- here is validation ----------------");
-        BlockUnit lastBlockValidate = blockContainer.get(blockContainer.size()-1);
-        ArrayList<InternalWrap> children = lastBlockValidate.getSubjectChildren();
-        for(InternalWrap inw : children) {
-        	System.out.println(inw);
-        	//System.out.println(inw.getDirectParent().getTimestampe());
-        }
-        System.out.println(" ");
 		
         resp.setContentType("text/html; charset=utf-8");
 		PrintWriter out = resp.getWriter();

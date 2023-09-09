@@ -29,14 +29,14 @@ import com.assign.entites.Student;
 /**
  * Servlet implementation class LecturerLoginServlet
  */
-@WebServlet("/LecturerLoginServlet")
-public class LecturerLoginServlet extends HttpServlet {
+@WebServlet("/StudentLoginServlet")
+public class StudentLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public LecturerLoginServlet() {
+	public StudentLoginServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -50,21 +50,9 @@ public class LecturerLoginServlet extends HttpServlet {
 		String username = (String) request.getParameter("username"); 
 		String password = (String) request.getParameter("password");
 		
-		System.out.println("======== LecturerLoginServlet ======== ");
+		System.out.println("======== StudentLoginServlet ======== ");
 		
-		LecturerDao ld = new LecturerDao();
-		Lecturer lecture = ld.findLecturer(username);
-		
-		if(password.trim().equals(lecture.getPassword())) {
-			request.setAttribute("lecturerID", lecture.getLecturerID());
-			request.setAttribute("fullName", lecture.getFullName());
-			
-			
-			request.getRequestDispatcher("/PublishMarksServlet").forward(request, resp);
-		} else {
-			request.setAttribute("errorMsg", "Sorry, your username or password is not correct!");
-			request.getRequestDispatcher("/error.jsp").forward(request, resp);
-		}
+		request.getRequestDispatcher("/studentDetails.jsp").forward(request, resp);
 
 	}
 

@@ -35,7 +35,7 @@ $(document).ready(function(){
             	var password = $("#password").val();
             	
             	var loginForm = $("#loginForm");
-            	loginForm.attr("action", "${pageContext.request.contextPath }/lecturerLogin");
+            	loginForm.attr("action", "${pageContext.request.contextPath }/loginDispatcher");
             	loginForm.submit();
             	
             })
@@ -70,19 +70,9 @@ $(document).ready(function(){
 			</div>
 			
 			<!-- hidden field to store the lecturer's signature -->
-			<input id="msg" type="hidden" name="msg" value="publish"/>
-			<input id="sign" type="hidden" name="sign", value="testsign">
-			<input id="publicKey" type="hidden" name="publicKey", value="">
+			<input id="type" type="hidden" name="type" value="<%=request.getParameter("type")%>"/>
+			
 		</form>
-	
-		<%-- <form action="${pageContext.request.contextPath }/test" method="post">
-			<input id="msg" type="hidden" name="msg" value="publish"/>
-			<input id="sign" type="hidden" name="sign", value="testsign">
-			<input id="publicKey" type="hidden" name="publicKey", value="">
-			<input type="submit" id="btn" value="Publish" /> <input id="tra" />
-        	<hr />
-        	<div id="publicKey">12</div>
-		</form> --%>
         
     </div>
 </body>
