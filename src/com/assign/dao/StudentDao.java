@@ -6,9 +6,66 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.assign.entites.Student;
 import com.assign.jdbc.JDBC;
 
 public class StudentDao {
+	
+	/**
+	 * Get a Student Object by a nickName.
+	 * @param nickName
+	 * @return
+	 */
+	public Student findStudent(String nickName) {
+		Student s = new Student();
+		
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet rs = null;
+		
+		try {
+			statement = JDBC.getStatement();
+			String sql = "SELECT studentID, fullName, nickName, password FROM Student where nickName = '" + nickName + "'";
+			//System.out.println(sql);
+			rs = statement.executeQuery(sql);
+			
+			while(rs.next()) {
+				s.setStudentID(rs.getInt("studentID"));
+				s.setFullName(rs.getString("fullName"));
+				s.setNickName(rs.getString("nickName"));
+				s.setPassword(rs.getString("password"));
+			}
+
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		} finally {
+			try {
+				if (statement != null) {
+
+					statement.close();
+
+					rs = null;
+				}
+
+				if (connection != null) {
+					connection.close();
+					connection = null;
+				}
+				
+				if (rs != null) {
+					rs.close();
+					rs = null;
+				}
+				
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+		
+		return s;
+	}
 	
 	/**
 	 * Get the latestVersion by studentID

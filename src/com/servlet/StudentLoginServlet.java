@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.assign.dao.BQuery;
 import com.assign.dao.LecturerDao;
+import com.assign.dao.StudentDao;
 import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
 
@@ -51,9 +52,13 @@ public class StudentLoginServlet extends HttpServlet {
 		String password = (String) request.getParameter("password");
 		
 		System.out.println("======== StudentLoginServlet ======== ");
-		
-		request.getRequestDispatcher("/studentDetails.jsp").forward(request, resp);
-
+		StudentDao sd = new StudentDao();
+		if(sd.findStudent(username).getPassword().equals(password)) {
+			request.getRequestDispatcher("/studentDetails.jsp").forward(request, resp);
+		} else {
+			request.setAttribute("errorMsg", "Sorry, your username or password is not correct!");
+			request.getRequestDispatcher("/error.jsp").forward(request, resp);
+		}
 	}
 
 	/**
