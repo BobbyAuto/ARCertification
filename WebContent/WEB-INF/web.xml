@@ -26,6 +26,15 @@
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>studentDetails</servlet-name>
+    <servlet-class>com.servlet.StudentDetailsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>studentDetails</servlet-name>
+    <url-pattern>/studentDetails</url-pattern> 
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>lecturerLogin</servlet-name>
     <servlet-class>com.servlet.LecturerLoginServlet</servlet-class>
   </servlet>

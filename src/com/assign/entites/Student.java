@@ -6,9 +6,9 @@ public class Student implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private Integer studentID;
-	private String fullName;
-	private String nickName;
-	private String password;
+	private String fullName = "";
+	private String nickName = "";
+	private String password = "";
 	public int latestVersion;
 	
 	
