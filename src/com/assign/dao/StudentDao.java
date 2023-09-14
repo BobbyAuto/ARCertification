@@ -25,7 +25,7 @@ public class StudentDao {
 		
 		try {
 			statement = JDBC.getStatement();
-			String sql = "SELECT studentID, fullName, nickName, password FROM Student where nickName = '" + nickName + "'";
+			String sql = "SELECT studentID, fullName, nickName, password, latestVersion FROM Student where nickName = '" + nickName + "'";
 			//System.out.println(sql);
 			rs = statement.executeQuery(sql);
 			
@@ -34,6 +34,7 @@ public class StudentDao {
 				s.setFullName(rs.getString("fullName"));
 				s.setNickName(rs.getString("nickName"));
 				s.setPassword(rs.getString("password"));
+				s.setLatestVersion(rs.getInt("latestVersion"));
 			}
 
 		} catch (SQLException e) {

@@ -117,7 +117,7 @@
 </script>
 </head>
 <body>
-<div class="fullName">  Hey, ${fullName} ! ${lecturerID}</div>
+<div class="fullName">  Hey, ${fullName} !</div>
 <hr />
 <div> 
 	<div class="subText">Subject: </div>
