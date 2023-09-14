@@ -24,28 +24,28 @@ $(document).ready(function(){
 
 </head>
 
-
-
 <body>
-	<h1 style="width:100%; margin-top:200px; text-align:center;">Please Login Here</h1>
-	<div style="width:100%; height:auto; display: flex; justify-content: center; align-items: center;">
+	<h1 id="loginTitle">Please Login Here</h1>
+	<div id="loginContainer">
 		<form id="loginForm" action="" method="post">
-			<div style="width:100%; height: 35px; ">
-				<div style="width:80px; height:35px; text-align: left; float: left; line-height: 35px; font-size:16px;">Username: </div>
+		
+			<div class="subConta">
+				<div class="inputText">Username: </div>
 				<div style="float: left;">
-					<input id="username" name="username" type="text" placeholder="input your username here" style="width: 250px; height:35px; border: 1px solid #D8D8D8"/>
-				</div>
-			</div>
-			<div style="width:100%; height: 35px;  margin-top:18px;">
-				<div style="width:80px; height:35px; text-align: left; float: left; line-height: 35px; font-size:16px;">Password: </div>
-				<div style="float: left;">
-					<input id="password" name="password" type="password" placeholder="input your password here" style="width: 250px; height:35px; border: 1px solid #D8D8D8"/>
+					<input id="username" name="username" type="text" placeholder="input your username here" />
 				</div>
 			</div>
 			
-			<div style="width:330px; height: 35px;  margin-top:28px; display: flex; justify-content: right; align-items: right;">
+			<div class="subConta">
+				<div class="inputText">Password: </div>
+				<div style="float: left;">
+					<input id="password" name="password" type="password" placeholder="input your password here"/>
+				</div>
+			</div>
+			
+			<div id="btnDiv">
 				
-				<button id="login" style="width: 100px; height:35px; font-size:15px;">Login</button>
+				<button id="login">Login</button>
 			</div>
 			
 			<!-- hidden field to store the lecturer's signature -->
