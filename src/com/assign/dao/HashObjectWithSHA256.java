@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.assign.blockchain.BlockUnit;
-import com.assign.blockchain.InternalWrap;
+import com.assign.blockchain.MarkSheet;
 import com.assign.blockchain.WriteBlockContainerToFile;
 import com.assign.entites.Student;
 
@@ -69,7 +69,7 @@ public class HashObjectWithSHA256 {
 		bu.setSubjectID(1);
 		bu.setTimestampe(LocalDateTime.now());
 		
-		InternalWrap intw = new InternalWrap();
+		MarkSheet intw = new MarkSheet();
 		intw.setStudentID(1);
 		intw.setStudentName("weichun");
 		intw.setSubjectID(1);
@@ -78,7 +78,7 @@ public class HashObjectWithSHA256 {
 		
 		bu.getSubjectChildren().add(intw);
 		
-		ArrayList<InternalWrap> children = bu.getSubjectChildren();
+		ArrayList<MarkSheet> children = bu.getSubjectChildren();
 		
 		
 		HashObjectWithSHA256 hos = new HashObjectWithSHA256(children);
@@ -94,7 +94,7 @@ public class HashObjectWithSHA256 {
 		
 		
 		ArrayList<BlockUnit> blockContainer2 = wbct.readBlockContainer();
-		ArrayList<InternalWrap> children2 = blockContainer2.get(0).getSubjectChildren();
+		ArrayList<MarkSheet> children2 = blockContainer2.get(0).getSubjectChildren();
 		
 		//s2.setLatestVersion(2);
 		HashObjectWithSHA256 hos2 = new HashObjectWithSHA256(children2);

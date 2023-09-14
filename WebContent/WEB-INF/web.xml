@@ -26,12 +26,12 @@
   </servlet-mapping>
   
   <servlet>
-    <servlet-name>studentDetails</servlet-name>
-    <servlet-class>com.servlet.StudentDetailsServlet</servlet-class>
+    <servlet-name>verifyStudentWholeScore</servlet-name>
+    <servlet-class>com.servlet.VerifyStudentWholeScoreServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>studentDetails</servlet-name>
-    <url-pattern>/studentDetails</url-pattern> 
+    <servlet-name>verifyStudentWholeScore</servlet-name>
+    <url-pattern>/verifyStudentWholeScore</url-pattern> 
   </servlet-mapping>
   
   <servlet>

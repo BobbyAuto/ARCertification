@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.assign.blockchain.BlockUnit;
-import com.assign.blockchain.InternalWrap;
+import com.assign.blockchain.MarkSheet;
 import com.assign.dao.BQuery;
 import com.assign.dao.HashObjectWithSHA256;
 import com.assign.dao.LecturerDao;
@@ -87,7 +87,7 @@ public class VerifyPreviousScoresServlet extends HttpServlet {
         	for(BlockUnit pastBu : blockContainer) {
         		if(pastBu.getStudentID() == studentID && pastBu.getLatestVersion() == latestVersion) {
         			isFoundSame = true;
-        			ArrayList<InternalWrap> subjectChildren = pastBu.getSubjectChildren();
+        			ArrayList<MarkSheet> subjectChildren = pastBu.getSubjectChildren();
         			
         			// Hash all subjects, which are in previous block, together.
             		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);

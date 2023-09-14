@@ -2,15 +2,10 @@ package com.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.security.Signature;
-import java.security.spec.X509EncodedKeySpec;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.assign.blockchain.BlockUnit;
-import com.assign.blockchain.InternalWrap;
+import com.assign.blockchain.MarkSheet;
 import com.assign.blockchain.WriteBlockContainerToFile;
 import com.assign.dao.BQuery;
 import com.assign.dao.HashObjectWithSHA256;
@@ -74,12 +69,12 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		System.out.println("======== BuildAndAddBlockServlet ======== ");
 		
 		// internal data, which should be integrity and will be hashed.
-		InternalWrap interW = new InternalWrap();
-		interW.setStudentID(studentID);
-		interW.setStudentName(studentName);
-		interW.setSubjectID(subjectID);
-		interW.setSubjectText(subjectText);
-		interW.setScore(score);
+		MarkSheet markSheet = new MarkSheet();
+		markSheet.setStudentID(studentID);
+		markSheet.setStudentName(studentName);
+		markSheet.setSubjectID(subjectID);
+		markSheet.setSubjectText(subjectText);
+		markSheet.setScore(score);
 		
 		BlockUnit bu = new BlockUnit();
 		bu.setStudentID(studentID);
@@ -94,9 +89,9 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
         if(blockContainer.isEmpty()) {
-        	bu.getSubjectChildren().add(interW);
+        	bu.getSubjectChildren().add(markSheet);
         	// Hash the current subject.
-        	ArrayList<InternalWrap> subjectChildren = bu.getSubjectChildren();
+        	ArrayList<MarkSheet> subjectChildren = bu.getSubjectChildren();
     		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
     		String hashString = hos.getHash();
     		bu.setBlockHash(hashString);
@@ -108,9 +103,9 @@ public class BuildAndAddBlockServlet extends HttpServlet {
         	for(BlockUnit pastBu : blockContainer) {
         		if(pastBu.getStudentID() == studentID && pastBu.getLatestVersion() == latestVersion) {
         			bu.getSubjectChildren().addAll(pastBu.getSubjectChildren());
-        			bu.getSubjectChildren().add(interW);
+        			bu.getSubjectChildren().add(markSheet);
         			
-        			ArrayList<InternalWrap> subjectChildren = bu.getSubjectChildren();
+        			ArrayList<MarkSheet> subjectChildren = bu.getSubjectChildren();
         			// Hash all subjects, which are in previous block, together.
             		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
             		String hashString = hos.getHash();
@@ -125,9 +120,9 @@ public class BuildAndAddBlockServlet extends HttpServlet {
             	bu.setPreviousHash(lastBlock.getBlockHash());
         	} else { 
         		// A new Student who had never been added into the block.
-        		bu.getSubjectChildren().add(interW);
+        		bu.getSubjectChildren().add(markSheet);
             	// Hash the current subject.
-            	ArrayList<InternalWrap> subjectChildren = bu.getSubjectChildren();
+            	ArrayList<MarkSheet> subjectChildren = bu.getSubjectChildren();
         		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
         		String hashString = hos.getHash();
         		bu.setBlockHash(hashString);

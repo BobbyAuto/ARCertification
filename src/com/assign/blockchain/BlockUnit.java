@@ -14,7 +14,7 @@ public class BlockUnit implements Serializable{
 	
 	private int studentID;
 	private int subjectID;
-	private ArrayList<InternalWrap> subjectChildren = new ArrayList<InternalWrap>(); // store all subject which was marked and already belonged to a block.
+	private ArrayList<MarkSheet> subjectChildren = new ArrayList<MarkSheet>(); // store all subject which was marked and already belonged to a block.
 	private String blockHash;
 	private String previousHash;
 	private int latestVersion;
@@ -51,10 +51,10 @@ public class BlockUnit implements Serializable{
 	public void setSubjectID(int subjectID) {
 		this.subjectID = subjectID;
 	}
-	public ArrayList<InternalWrap> getSubjectChildren() {
+	public ArrayList<MarkSheet> getSubjectChildren() {
 		return subjectChildren;
 	}
-	public void setSubjectChildren(ArrayList<InternalWrap> subjectChildren) {
+	public void setSubjectChildren(ArrayList<MarkSheet> subjectChildren) {
 		this.subjectChildren = subjectChildren;
 	}
 	public String getBlockHash() {

@@ -30,14 +30,14 @@ import com.assign.entites.Student;
 /**
  * Servlet implementation class LecturerLoginServlet
  */
-@WebServlet("/StudentLoginServlet")
-public class StudentLoginServlet extends HttpServlet {
+@WebServlet("/VerifyStudentWholeScoreServlet")
+public class VerifyStudentWholeScoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public StudentLoginServlet() {
+	public VerifyStudentWholeScoreServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -48,20 +48,14 @@ public class StudentLoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		
-		String username = (String) request.getParameter("username"); 
-		String password = (String) request.getParameter("password");
+		Student student = (Student) request.getAttribute("student");
 		
-		System.out.println("======== StudentLoginServlet ======== ");
-		StudentDao sd = new StudentDao();
-		Student student = sd.findStudent(username);
-		if(student.getPassword().equals(password)) {
-			request.setAttribute("student", student);
-			request.getRequestDispatcher("/StudentDetailsServlet").forward(request, resp);
-			//request.getRequestDispatcher("/studentDetails.jsp").forward(request, resp);
-		} else {
-			request.setAttribute("errorMsg", "Sorry, your username or password is not correct!");
-			request.getRequestDispatcher("/error.jsp").forward(request, resp);
-		} 
+		System.out.println("======== VerifyStudentWholeScoreServlet ======== ");
+		
+		System.out.println("fullName = " + student.getFullName());
+		
+		request.getRequestDispatcher("/studentDetails.jsp").forward(request, resp);
+		
 	}
 
 	/**
