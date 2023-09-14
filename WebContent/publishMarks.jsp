@@ -62,7 +62,6 @@
 	}
 	
 	function goMark(e, studentID, subjectID) {
-		
 		var studentName = e.id.split("-")[0]; // get studentName from id value of <a> element.
 		
 		var mark=prompt("Give a mark here","");
@@ -112,10 +111,7 @@
 			} else {
 				alert("Please give a valid score!");	
 			}
-
 		}
-
-
 	}
 
 </script>
@@ -141,7 +137,7 @@
 	</div>
 </div>
 <div id="result">
-	<table id="studentsList" style="border:solid 1px gray;">
+	<table id="studentsList">
 	    <thead>
 	        <tr>
 	            <th>studentID</th>

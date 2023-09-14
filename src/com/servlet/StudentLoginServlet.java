@@ -56,7 +56,7 @@ public class StudentLoginServlet extends HttpServlet {
 		Student student = sd.findStudent(username);
 		if(student.getPassword().equals(password)) {
 			request.setAttribute("student", student);
-			request.getRequestDispatcher("/StudentDetailsServlet").forward(request, resp);
+			request.getRequestDispatcher("/VerifyStudentWholeScoreServlet").forward(request, resp);
 			//request.getRequestDispatcher("/studentDetails.jsp").forward(request, resp);
 		} else {
 			request.setAttribute("errorMsg", "Sorry, your username or password is not correct!");

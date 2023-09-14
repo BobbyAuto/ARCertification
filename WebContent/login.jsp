@@ -5,30 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Login Here</title>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/all.css">
 <script src="${pageContext.request.contextPath }/js/jquery-3.7.0.js"></script>
-<script src="${pageContext.request.contextPath }/js/jsencrypt-3.2.1.js"></script>
-<script src="${pageContext.request.contextPath }/js/crypto-js.js"></script>
-<script src="${pageContext.request.contextPath }/js/Tools.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
-            var keys = generateKeyPair();
-            var publicKey = keys.publicKey;
-            var privateKey = keys.privateKey;
-            
-            var publicKeyBase64 = publicKey
-            .replace("-----BEGIN PUBLIC KEY-----", "")
-            .replace("-----END PUBLIC KEY-----", "")
-            .replace(/\s/g, '');
-            
-            $("#publicKey").val(publicKeyBase64)
-            var message =  $("#msg").val();
-            var signature = signMessage(privateKey, message);
-            $("#sign").val(signature);
-            
-            /* verify the signature here */
-            //var isvalid = verifySignature(publicKey, message, signature);
-            
             $("#login").click(function() {
             	
             	var username = $("#username").val();
@@ -37,9 +18,7 @@ $(document).ready(function(){
             	var loginForm = $("#loginForm");
             	loginForm.attr("action", "${pageContext.request.contextPath }/loginDispatcher");
             	loginForm.submit();
-            	
             })
-            
         });
     </script>
 
