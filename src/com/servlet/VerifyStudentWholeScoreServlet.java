@@ -64,9 +64,9 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 			ArrayList<MarkSheet> markSheetsList = verifyStudentInterity(student, blockContainer);
 			request.setAttribute("student", student);
 			if (markSheetsList == null) {
-				request.setAttribute("verifyStatus", "failed");
+				request.setAttribute("verifyStatus", "<span style='color:red;'>Verify Failed</span>");
 			} else {
-				request.setAttribute("verifyStatus", "success");
+				request.setAttribute("verifyStatus", "<span style='color:green;'>Verify Success</span>");
 				request.setAttribute("markSheetsList", markSheetsList);
 			}
 		}
@@ -83,6 +83,7 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 	 */
 	private ArrayList<MarkSheet> verifyStudentInterity(Student student, ArrayList<BlockUnit> blockContainer) {
 		ArrayList<MarkSheet> markSheetsList = null;
+		boolean isPassed = true;
 		
 		int latestVersion = student.getLatestVersion();
 		int studentID = student.getStudentID();
@@ -92,18 +93,31 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 			if(bu.getStudentID() == studentID) {
 				ArrayList<MarkSheet> subjectChildren = bu.getSubjectChildren();
 				HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
-				// if hash verification pass
+				// verify the hash of subjectChildren
 				if(hos.getHash().equals(bu.getBlockHash())) {
-					if(bu.getLatestVersion() == latestVersion) {
-						markSheetsList = subjectChildren;
-						break;
-					} else {
-						markSheetsList = subjectChildren;
-						continue;
+					
+					if(i+1 < blockContainer.size()) {
+						BlockUnit buNext = blockContainer.get(i+1);
+						// verify the hash of current bu is equals with the previous hash of next bu.
+						if(new HashObjectWithSHA256(bu).getHash().equals(buNext.getPreviousHash())) {
+							if(bu.getLatestVersion() == latestVersion) {
+								markSheetsList = subjectChildren;
+								break;
+							} else {
+								markSheetsList = subjectChildren;
+								continue;
+							}
+						} else {
+							// TODO if a MarkSheet in subjectChildren was falsified, try to recover it here.
+							markSheetsList = null;
+							isPassed = false;
+							break;
+						}
 					}
 				} else { 
 					// TODO if a MarkSheet in subjectChildren was falsified, try to recover it here.
 					markSheetsList = null;
+					isPassed = false;
 					break;
 				}
 			}

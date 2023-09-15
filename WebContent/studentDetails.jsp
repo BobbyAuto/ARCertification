@@ -15,12 +15,14 @@
 
 </head>
 <body>
-<p id="headContainer">
+<div id="headContainer">
 	<p id="sdLeft">Assessment Details</p>
-	<p id="sdMiddle">Verified.</p>
+	<p id="sdMiddle">${verifyStatus}</p>
 	<p id="sdRight">${student.getFullName() }</p>
-</p>
+</div>
+<!-- 
 <span>${verifyStatus}</span>
 <span>${markSheetsList.size() }</span>
+ -->
 </body>
 </html>
