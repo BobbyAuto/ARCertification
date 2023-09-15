@@ -109,8 +109,10 @@ public class BuildAndAddBlockServlet extends HttpServlet {
         		}
         	}
         	if(isFoundSame == true) {
-        		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
-            	bu.setPreviousHash(lastBlock.getBlockHash());
+        		// get the last Block, then calculate its hash as the previous hash of current block;
+        		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); 
+        		HashObjectWithSHA256 hos = new HashObjectWithSHA256(lastBlock);
+            	bu.setPreviousHash(hos.getHash());
         	} else { 
         		// A new Student who had never been added into the block.
         		bu.getSubjectChildren().add(markSheet);
@@ -121,7 +123,8 @@ public class BuildAndAddBlockServlet extends HttpServlet {
         		bu.setBlockHash(hashString);
         		
         		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
-            	bu.setPreviousHash(lastBlock.getBlockHash());
+        		HashObjectWithSHA256 preHos = new HashObjectWithSHA256(lastBlock);
+            	bu.setPreviousHash(preHos.getHash());
         	}
         }        
         

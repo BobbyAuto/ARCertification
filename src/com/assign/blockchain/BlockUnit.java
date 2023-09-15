@@ -16,7 +16,7 @@ public class BlockUnit implements Serializable{
 	private int subjectID;
 	private ArrayList<MarkSheet> subjectChildren = new ArrayList<MarkSheet>(); // store all subject which was marked and already belonged to a block.
 	private String blockHash;
-	private String previousHash;
+	private String previousHash = "";
 	private int latestVersion;
 	private String timestampe;
 	

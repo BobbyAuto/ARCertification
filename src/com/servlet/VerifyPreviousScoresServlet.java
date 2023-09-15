@@ -69,18 +69,21 @@ public class VerifyPreviousScoresServlet extends HttpServlet {
         if(blockContainer.isEmpty()) {
         	request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
         } else {
-        	
-        	// Verify the hash of the closest block
-        	BlockUnit lastBu = blockContainer.get(blockContainer.size()-1);
-        	if (! new HashObjectWithSHA256(lastBu.getSubjectChildren())
-        			.getHash()
-        			.equals(lastBu.getBlockHash())
-        		) {
-        		resp.setContentType("text/html; charset=utf-8");
-        		PrintWriter out = resp.getWriter();
-        	    out.print("falsified");
-        	    out.flush();
-        		return;
+        	if (blockContainer.size() > 1) {
+        		// Verify the hash of the closest block
+            	BlockUnit lastBu = blockContainer.get(blockContainer.size()-1);
+            	BlockUnit last2Bu = blockContainer.get(blockContainer.size()-2);
+            	if (! new HashObjectWithSHA256(last2Bu)
+            			.getHash()
+            			.equals(lastBu.getPreviousHash())
+            		) {
+            		resp.setContentType("text/html; charset=utf-8");
+            		PrintWriter out = resp.getWriter();
+            	    out.print("falsified");
+            	    out.flush();
+            		return;
+            	}
+            	System.out.println("--------- Verify Previous hash of the last Block Passed! --------");
         	}
         	
         	boolean isFoundSame = false;
