@@ -52,8 +52,6 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 		
 		Student student = (Student) request.getAttribute("student");
-		int studentID = student.getStudentID();
-		int latestVersion = student.getLatestVersion();
 		
 		System.out.println("======== VerifyStudentWholeScoreServlet ======== ");
 		
@@ -64,6 +62,7 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 			
 		} else {
 			ArrayList<MarkSheet> markSheetsList = verifyStudentInterity(student, blockContainer);
+			request.setAttribute("student", student);
 			if (markSheetsList == null) {
 				request.setAttribute("verifyStatus", "failed");
 			} else {

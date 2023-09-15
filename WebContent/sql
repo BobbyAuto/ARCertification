@@ -1,3 +1,5 @@
+create database block_chain;
+
 CREATE TABLE Lecturer (
     lecturerID INT AUTO_INCREMENT PRIMARY KEY,
     fullName VARCHAR(50) NOT NULL,

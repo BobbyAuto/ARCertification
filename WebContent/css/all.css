@@ -61,3 +61,37 @@
 	width: 100px; height:35px; 
 	font-size:15px;
 }
+
+
+
+/** for studentDetails.jsp page**/
+#headContainer {
+	width:60%; height: 40px;
+	position: absolute;
+	left:10px; top: 5px;
+	font-size: 16px;
+	border:solid 1px;
+}
+
+#sdLeft {
+	
+	width: 12%; height: 40px;
+	 float: left;
+	 color:rgb(60, 60, 60);
+	 font-size: 20px;
+	 line-height: 40px;
+	 background-color: antiquewhite;
+	 
+ }
+ #sdMiddle {
+	 width:20%; height:40px;
+	 float: left;
+	 color: green;
+	 line-height: 40px;
+ }
+ #sdRight {
+	 width:20%; height: 40px;
+	 float: left;
+	 text-align: right;
+	 line-height: 40px;
+ }
