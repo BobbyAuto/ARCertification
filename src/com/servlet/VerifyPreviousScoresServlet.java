@@ -87,7 +87,8 @@ public class VerifyPreviousScoresServlet extends HttpServlet {
         	}
         	
         	boolean isFoundSame = false;
-        	for(BlockUnit pastBu : blockContainer) {
+        	for(int i=0; i<blockContainer.size(); i++) {
+        		BlockUnit pastBu = blockContainer.get(i);
         		if(pastBu.getStudentID() == studentID && pastBu.getLatestVersion() == latestVersion) {
         			isFoundSame = true;
         			ArrayList<MarkSheet> subjectChildren = pastBu.getSubjectChildren();
@@ -97,8 +98,17 @@ public class VerifyPreviousScoresServlet extends HttpServlet {
             		String hashString = hos.getHash();
             		
             		if (pastBu.getBlockHash().equals(hashString)) {
-            			System.out.println("--------- Verify Previous Scores Passed! --------");
-                		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+            			// verify the hash of pastBu is equals with the previous hash of next block.
+            			if(i+1 < blockContainer.size()) {
+            				BlockUnit pastNextBu = blockContainer.get(i+1);
+            				if(new HashObjectWithSHA256(pastBu)
+            						.getHash()
+            						.equals(pastNextBu.getPreviousHash())) {
+            					System.out.println("--------- Verify Previous Scores Passed! --------");
+                        		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+            				}
+            			}
+            			
             		} else {
             			resp.setContentType("text/html; charset=utf-8");
                 		PrintWriter out = resp.getWriter();
