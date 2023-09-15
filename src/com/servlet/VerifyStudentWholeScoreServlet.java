@@ -64,9 +64,9 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 			ArrayList<MarkSheet> markSheetsList = verifyStudentInterity(student, blockContainer);
 			request.setAttribute("student", student);
 			if (markSheetsList == null) {
-				request.setAttribute("verifyStatus", "<span style='color:red;'>Verify Failed</span>");
+				request.setAttribute("verifyStatus", "<span style='color:red;'>Verification Failed</span>");
 			} else {
-				request.setAttribute("verifyStatus", "<span style='color:green;'>Verify Success</span>");
+				request.setAttribute("verifyStatus", "<span style='color:green;'>Verification Successful</span>");
 				request.setAttribute("markSheetsList", markSheetsList);
 			}
 		}

@@ -46,6 +46,8 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
+		ServletContext servletContext = getServletContext();
+		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
 		
 		int lecturerID = Integer.parseInt(request.getParameter("lecturerID"));
 		int studentID = Integer.parseInt(request.getParameter("studentID"));
@@ -70,17 +72,16 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		markSheet.setScore(score);
 		
 		BlockUnit bu = new BlockUnit();
+		if(!blockContainer.isEmpty()) {
+			bu = blockContainer.get(blockContainer.size()-1); // get the empty tail block.
+		}
 		bu.setStudentID(studentID);
 		bu.setSubjectID(subjectID);
 		bu.setLatestVersion(newVersion);
 		bu.setTimestampe(LocalDateTime.now()); // set the current system timestampe.
-		
-		//interW.setDirectParent(bu); // belong to a block parent.		
-		
+				
 		StudentAndSubjectDao ssd = new StudentAndSubjectDao();
 		
-		ServletContext servletContext = getServletContext();
-		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
         if(blockContainer.isEmpty()) {
         	bu.getSubjectChildren().add(markSheet);
         	// Hash the current subject.
@@ -88,9 +89,9 @@ public class BuildAndAddBlockServlet extends HttpServlet {
     		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
     		String hashString = hos.getHash();
     		bu.setBlockHash(hashString);
-    		//System.out.println(interW);
+    		blockContainer.add(bu); // add new block to container.
     		
-        } else { 
+        } else {
         	boolean isFoundSame = false;
         	// find the latest block of the same Student
         	for(BlockUnit pastBu : blockContainer) {
@@ -108,12 +109,7 @@ public class BuildAndAddBlockServlet extends HttpServlet {
             		break;
         		}
         	}
-        	if(isFoundSame == true) {
-        		// get the last Block, then calculate its hash as the previous hash of current block;
-        		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); 
-        		HashObjectWithSHA256 hos = new HashObjectWithSHA256(lastBlock);
-            	bu.setPreviousHash(hos.getHash());
-        	} else { 
+        	if(!isFoundSame) {
         		// A new Student who had never been added into the block.
         		bu.getSubjectChildren().add(markSheet);
             	// Hash the current subject.
@@ -121,16 +117,17 @@ public class BuildAndAddBlockServlet extends HttpServlet {
         		HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
         		String hashString = hos.getHash();
         		bu.setBlockHash(hashString);
-        		
-        		BlockUnit lastBlock = blockContainer.get(blockContainer.size()-1); // get the last Block, then get the previous hash;
-        		HashObjectWithSHA256 preHos = new HashObjectWithSHA256(lastBlock);
-            	bu.setPreviousHash(preHos.getHash());
         	}
         }        
         
-        blockContainer.add(bu); // add new block to container.
+        
 		sd.updateLatestVersion(studentID, newVersion); // update the latestVersion in JDBC table;
 		ssd.updateScore(studentID, subjectID, score); // update the subject score of the student in JDBC table
+		
+		// create an empty block to store the hash value of the current block, append this empty block to the tail of the chain.
+		BlockUnit buTail = new BlockUnit();
+		buTail.setPreviousHash(new HashObjectWithSHA256(bu).getHash());
+		blockContainer.add(buTail);
 		
 		/* save the block container into a file.*/
 		String contextPath = getServletContext().getRealPath("/");
@@ -153,7 +150,5 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		
 		this.doGet(request, response);
 	}
-	
-	
 
 }

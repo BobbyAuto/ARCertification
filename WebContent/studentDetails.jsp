@@ -24,5 +24,35 @@
 <span>${verifyStatus}</span>
 <span>${markSheetsList.size() }</span>
  -->
+ 
+	<table id="tbDetails">
+		<thead>
+			<tr>
+				<th>Subject Code</th>
+				<th>Subject</th>
+				<th>Score</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			ArrayList<MarkSheet> markSheetsList = (ArrayList<MarkSheet>) request.getAttribute("markSheetsList");
+			for(int i=0; i<markSheetsList.size(); i++) {
+				MarkSheet markSheet = markSheetsList.get(i);
+				String[] text = markSheet.getSubjectText().split("-");
+				
+				%>
+				<tr>
+					<td><%=text[0] %></td>
+					<td><%=text[1] %></td>
+					<td><%=markSheet.getScore() %></td>
+				</tr>
+				<%
+			}
+			%>
+		</tbody>
+	</table>
+	
+	
 </body>
 </html>
