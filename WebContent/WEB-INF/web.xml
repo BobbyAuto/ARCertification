@@ -90,6 +90,18 @@
     <url-pattern>/buildAndAddBlockServlet</url-pattern>
   </servlet-mapping>
   
+  
+  <servlet>
+    <servlet-name>assignAccessCode</servlet-name>
+    <servlet-class>com.servlet.AssignAccessCodeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>assignAccessCode</servlet-name>
+    <url-pattern>/assignAccessCode</url-pattern>
+  </servlet-mapping>
+  
+  
+  
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
