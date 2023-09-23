@@ -1,2 +1,2 @@
 # ARCertification
-Academic Records Certification System Based on Blockchain Technology
+Academic Records Certification System Based on Pure Blockchain Technology
