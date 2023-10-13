@@ -104,10 +104,28 @@ public class VerifyPreviousScoresServlet extends HttpServlet {
             				if(new HashObjectWithSHA256(pastBu)
             						.getHash()
             						.equals(pastNextBu.getPreviousHash())) {
-            					System.out.println("--------- Verify Previous Scores Passed! --------");
-                        		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+            					
+            					// verify signature
+            					Security se = new Security(pastBu.getLecturerID());
+            					if(se.verifySignature(pastBu.getSignature(), pastBu.getMessage())) {
+            						
+            						
+            						System.out.println("--------- Verify Previous Scores Passed! --------");
+                            		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
+            					}
+            					
+            					
             				}
             			}
+            			
+            			// verify signature
+            			String msg = pastBu.getMessage();
+            			String sign = pastBu.getSignature();
+            			int lecturerID = pastBu.getLecturerID();
+            			
+            			
+            			
+            			
             			
             		} else {
             			resp.setContentType("text/html; charset=utf-8");

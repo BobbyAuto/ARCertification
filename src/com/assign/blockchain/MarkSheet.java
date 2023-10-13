@@ -11,6 +11,8 @@ public class MarkSheet implements Serializable{
 	private int subjectID;
 	private String subjectText;
 	private float score;
+	
+	private int lecturerID;
 	//private BlockUnit directParent;
 	
 	
@@ -51,6 +53,14 @@ public class MarkSheet implements Serializable{
 	public void setScore(float score) {
 		this.score = score;
 	}
+	
+	public int getLecturerID() {
+		return lecturerID;
+	}
+	public void setLecturerID(int lecturerID) {
+		this.lecturerID = lecturerID;
+	}
+	
 	
 	@Override
 	public String toString() {

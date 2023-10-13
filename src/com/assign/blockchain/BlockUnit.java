@@ -12,13 +12,20 @@ public class BlockUnit implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int studentID;
-	private int subjectID;
-	private ArrayList<MarkSheet> subjectChildren = new ArrayList<MarkSheet>(); // store all subject which was marked and already belonged to a block.
+	private int latestVersion;
 	private String blockHash;
 	private String previousHash = "";
-	private int latestVersion;
 	private String timestampe;
+	
+	private int studentID;
+	private int subjectID;
+	private int lecturerID;
+	
+	String message; 
+	String signature;
+	
+	private ArrayList<MarkSheet> subjectChildren = new ArrayList<MarkSheet>(); // store all subject which was marked and already belonged to a block.
+
 	
 	public String getTimestampe() {
 		return timestampe;
@@ -68,5 +75,23 @@ public class BlockUnit implements Serializable{
 	}
 	public void setPreviousHash(String previousHash) {
 		this.previousHash = previousHash;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public String getSignature() {
+		return signature;
+	}
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+	public int getLecturerID() {
+		return lecturerID;
+	}
+	public void setLecturerID(int lecturerID) {
+		this.lecturerID = lecturerID;
 	}
 }

@@ -55,6 +55,9 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		int subjectID = Integer.parseInt(request.getParameter("subjectID"));
 		String subjectText = request.getParameter("subjectText");
 		
+		String message = (String) request.getParameter("message"); 
+		String signature = (String) request.getParameter("signature");
+		
 		float score = Float.parseFloat(request.getParameter("score"));
 		
 		StudentDao sd = new StudentDao();
@@ -70,6 +73,7 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		markSheet.setSubjectID(subjectID);
 		markSheet.setSubjectText(subjectText);
 		markSheet.setScore(score);
+		markSheet.setLecturerID(lecturerID);
 		
 		BlockUnit bu = new BlockUnit();
 		if(!blockContainer.isEmpty()) {
@@ -77,8 +81,11 @@ public class BuildAndAddBlockServlet extends HttpServlet {
 		}
 		bu.setStudentID(studentID);
 		bu.setSubjectID(subjectID);
+		bu.setLecturerID(lecturerID);
 		bu.setLatestVersion(newVersion);
 		bu.setTimestampe(LocalDateTime.now()); // set the current system timestampe.
+		bu.setMessage(message);
+		bu.setSignature(signature);
 				
 		StudentAndSubjectDao ssd = new StudentAndSubjectDao();
 		
