@@ -115,7 +115,10 @@
 					  success: function(data) {
 						  
 						  if (data == 'falsified') {
-							  alert("Ohh, The student's scores of subjects have been falsified!");
+							  alert("Ohh, The student's scores of previous subjects have been falsified!");
+							  return;
+						  } else if (data == 'signfFailed') {
+							  alert("Ohh, your signature verification is failed!");
 							  return;
 						  }
 						  alert("success!");

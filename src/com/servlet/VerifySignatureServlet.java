@@ -1,7 +1,7 @@
 package com.servlet;
 
 import java.io.IOException;
-
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,7 +46,11 @@ public class VerifySignatureServlet extends HttpServlet {
 		if(se.verifySignature(signature, message)) {
 			request.getRequestDispatcher("/VerifyPreviousScoresServlet").forward(request, resp);
 		} else { 
-			
+			resp.setContentType("text/html; charset=utf-8");
+    		PrintWriter out = resp.getWriter();
+    	    out.print("signfFailed");
+    	    out.flush();
+    		return;
 		}
 		
 		

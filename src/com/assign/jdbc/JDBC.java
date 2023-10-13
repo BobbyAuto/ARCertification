@@ -19,9 +19,9 @@ public class JDBC {
 	public static Connection getConnection() {
 
         try {
-			//实例化驱动
+			//Driver Instance
 			Class.forName(DRIVER);
-			//获取连接
+			//Get Connection
 			Connection conn = DriverManager.getConnection(URL, USER, PWD);
 			return conn;
 		} catch (ClassNotFoundException e) {
