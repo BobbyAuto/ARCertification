@@ -13,10 +13,25 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/css/publishMarks.css">
 
 <script src="${pageContext.request.contextPath }/js/jquery-3.7.0.js"></script>
-<script src="${pageContext.request.contextPath }/js/jsencrypt-3.2.1.js"></script>
-<script src="${pageContext.request.contextPath }/js/crypto-js.js"></script>
-<script src="${pageContext.request.contextPath }/js/Tools.js"></script>
+<script src="${pageContext.request.contextPath }/js/jsrsasign-all-min.js"></script>
+
+<script src="${pageContext.request.contextPath }/js/Keys.js"></script>
 <script type="text/javascript">
+
+	/* 
+		pass a private key and message to give a signature
+	*/
+	function signature(msg, prvKeyPem){
+	    var sig = new KJUR.crypto.Signature({"alg": "SHA1withRSA"});
+	    sig.init(prvKeyPem);
+	    sig.updateString(msg)
+	    var sigValueHex = sig.sign()
+	
+	    var rstr = hextorstr(sigValueHex);
+	    base64str = btoa(rstr);
+	    return base64str;
+	}
+
 	
 	var subjectText = ""; 
 	
@@ -62,6 +77,7 @@
 	}
 	
 	function goMark(e, studentID, subjectID) {
+		
 		var studentName = e.id.split("-")[0]; // get studentName from id value of <a> element.
 		
 		var mark=prompt("Give a mark here","");
@@ -69,9 +85,18 @@
 			var numericMark = parseFloat(mark);
 			if (!isNaN(numericMark) && numericMark >= 1 && numericMark <= 100) {
 				var lecturerID = ${lecturerID};
-	            var privateKey = ""; 
-	            var message = studentID + "-" + subjectID + "-" + lecturerID + "-" + numericMark;
-	            var signature = signMessage(privateKey, message);
+				var privateKey = ""; 
+				
+				if(lecturerID = lecturerKeys.P1.id) {
+					privateKey = lecturerKeys.P1.priKey
+				} else if(lecturerID = lecturerKeys.P2.id) {
+					privateKey = lecturerKeys.P2.priKey
+				}
+				
+	            
+	            var message = lecturerID + "-" + subjectID + "-" + studentID + "-" + numericMark;
+	            
+	            var signatureResult = signature(message, privateKey);
 				
 				$.ajax({
 					url: "${pageContext.request.contextPath }/verifySignatureServlet",
@@ -85,7 +110,7 @@
 						  lecturerID: lecturerID,
 						  score: numericMark,
 						  message: message,
-						  signature: signature
+						  signature: signatureResult
 						  },
 					  success: function(data) {
 						  

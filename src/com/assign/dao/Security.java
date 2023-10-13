@@ -1,9 +1,16 @@
 package com.assign.dao;
 
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Base64;
 
 import com.assign.jdbc.JDBC;
 
@@ -17,18 +24,41 @@ public class Security {
 	
 	/**
 	 * Validate the signature from a lecturer;
-	 * @param signature
+	 * @param signatureResult
 	 * @param message
 	 * @return
+	 * @throws NoSuchAlgorithmException 
+	 * @throws InvalidKeySpecException 
 	 */
-	public boolean verifySignature(String signature, String message) {
-		boolean isValid = true;
+	public boolean verifySignature(String signatureResult, String message) {
+		boolean isValid = false;
 		
 		String publicKey = this.getPublicKey();
 		
 		
+		KeyFactory keyFactory;
 		
-		return isValid;
+		try {
+			keyFactory = KeyFactory.getInstance("RSA");
+			byte[] publicKeyBytes = Base64.getDecoder().decode(publicKey);
+	        X509EncodedKeySpec pubPKCS8 = new X509EncodedKeySpec(publicKeyBytes);
+	        PublicKey pubKey = keyFactory.generatePublic(pubPKCS8);
+	        
+	        Signature signature = Signature.getInstance("SHA1withRSA");
+	        signature.initVerify(pubKey);
+	        signature.update(message.getBytes());
+	        
+	        byte[] computedSignature = Base64.getDecoder().decode(signatureResult);
+	        
+	        
+	        isValid = signature.verify(computedSignature);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return isValid;
 	}
 	
 	

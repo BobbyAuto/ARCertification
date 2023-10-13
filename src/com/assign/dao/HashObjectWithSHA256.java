@@ -64,46 +64,17 @@ public class HashObjectWithSHA256 {
 	}
 	
 	public static void main(String[] args) {
-		BlockUnit bu = new BlockUnit();
-		bu.setStudentID(1);
-		bu.setSubjectID(1);
-		bu.setTimestampe(LocalDateTime.now());
-		
-		MarkSheet intw = new MarkSheet();
-		intw.setStudentID(1);
-		intw.setStudentName("weichun");
-		intw.setSubjectID(1);
-		intw.setScore(68);
-//		intw.setDirectParent(bu);
-		
-		bu.getSubjectChildren().add(intw);
-		
-		ArrayList<MarkSheet> children = bu.getSubjectChildren();
 		
 		
-		HashObjectWithSHA256 hos = new HashObjectWithSHA256(children);
+		String str = "Internship2023Weichun Wang2";
+		HashObjectWithSHA256 hos = new HashObjectWithSHA256(str);
 		String hashString = hos.getHash();
 		
-		ArrayList<BlockUnit> blockContainer = new ArrayList<BlockUnit> ();
-		blockContainer.add(bu);
 		
-		String contextPath = "/Users/wangweichun/MyTomcat/webapps/ARCertification/";
-		WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath, blockContainer);
-		wbct.writeBlockContainer();
-		
-		
-		
-		ArrayList<BlockUnit> blockContainer2 = wbct.readBlockContainer();
-		ArrayList<MarkSheet> children2 = blockContainer2.get(0).getSubjectChildren();
-		
-		//s2.setLatestVersion(2);
-		HashObjectWithSHA256 hos2 = new HashObjectWithSHA256(children2);
-		String hashString2 = hos2.getHash();
 
 		
 		System.out.println("hashString = " + hashString);
-		System.out.println("hashString2 = " + hashString2);
-		System.out.println(hashString.equals(hashString2));
+		
 
 	}
 
