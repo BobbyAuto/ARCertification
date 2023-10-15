@@ -21,7 +21,7 @@
 				<a href="login.jsp?type=lecturer">I'm a Lecturer</a>
 			</div>
 			<div>
-				<a href="login.jsp?type=empoloyer">I'm a Empoloyer</a>
+				<a href="empoloyerLogin.jsp?type=empoloyer">I'm a Empoloyer</a>
 			</div>
 		</div>
 

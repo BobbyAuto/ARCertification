@@ -16,9 +16,15 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		
-		$("#assignAC").click(function() {
-			$("#hiddenForm").submit();
-		});
+		if($("#employer").val() != "") {
+			$("#assignAC").hide()
+		} else {
+			$("#assignAC").click(function() {
+				$("#hiddenForm").submit();
+			});
+		}
+		
+		
 		
 	});
 </script>
@@ -59,7 +65,7 @@
 	</table>
 <form id="hiddenForm" method="post" action="assignAccessCode.jsp">
 	<input type="hidden" name="studentID" value="${student.getStudentID() }" />
-	<input type="hidden" name="employer" value="" />
+	<input type="hidden" id="employer" name="employer" value="${email }" />
 </form>
 	
 </body>

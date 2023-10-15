@@ -31,25 +31,26 @@ h2 {
 </script>
 </head>
 <body>
-<h2>Assign Access Code for Third Parties</h2>
+<h2>Access student's academic records.</h2>
 <div id=ACcontainer>
-	<form id="tpForm" method="post" action="${pageContext.request.contextPath }/assignAccessCode">
+	<form id="tpForm" method="post" action="${pageContext.request.contextPath }/loginDispatcher">
 		<div class="tpSub">
 			<div class="tpSubText">Third Party Email:</div>
-			
 			<input type="email" name="email"/>
 		</div>
 		
 		<div class="tpSub">
-			<div class="tpSubText">Expiration Date:</div>
-			<select name="eDate">
-				<option value=1>1 day</option>
-				<option value=3>3 day</option>
-				<option value=7>7 day</option>
-			</select>
+			<div class="tpSubText">Student Name:</div>
+			<input type="text" name="studentName"/>
 		</div>
-		<input type="hidden" name="studentID" value="<%=request.getParameter("studentID") %>" />
 		
+		<div class="tpSub">
+			<div class="tpSubText">Student ID:</div>
+			<input type="text" name="studentId"/>
+		</div>
+		
+		
+		<input id="type" type="hidden" name="type" value="<%=request.getParameter("type")%>"/>
 		<input id="submit" type="submit" value="Submit"/>
 	</form>
 </div>

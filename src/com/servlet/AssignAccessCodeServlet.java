@@ -53,17 +53,10 @@ public class AssignAccessCodeServlet extends HttpServlet {
 		
 		System.out.println("======== AssignAccessCodeServlet ======== ");
 		
-		System.out.println("studentID = " + studentID);
-		System.out.println("email = " + email);
-		System.out.println("eDate = " + eDate);
+		request.setAttribute("result", "success");
 		
+		request.getRequestDispatcher("/assignAccessCode.jsp").forward(request, resp);
 		
-//			request.setAttribute("lecturerID", lecture.getLecturerID());
-//			request.setAttribute("fullName", lecture.getFullName());
-//			
-//			
-//			request.getRequestDispatcher("/PublishMarksServlet").forward(request, resp);
-
 	}
 
 	/**

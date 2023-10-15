@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.assign.dao.BQuery;
 import com.assign.dao.LecturerDao;
+import com.assign.dao.StudentDao;
 import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
 
@@ -56,7 +57,22 @@ public class LoginDispatcherServlet extends HttpServlet {
 		} else if (type.trim().equals("lecturer")) {
 			request.getRequestDispatcher("/LecturerLoginServlet").forward(request, resp);
 		} else if(type.trim().equals("empoloyer")) {
-			System.out.println("Empoloyer!");
+//			System.out.println("Empoloyer!");
+			String studentName = (String) request.getParameter("studentName"); 
+			String studentId = (String) request.getParameter("studentId");
+			String email = (String) request.getParameter("email");
+			
+			if(studentName != null && !studentName.equals("")) {
+				StudentDao sd = new StudentDao();
+				Student student = sd.findStudent(studentName);
+				request.setAttribute("email", email);
+				request.setAttribute("student", student);
+				request.getRequestDispatcher("/VerifyStudentWholeScoreServlet").forward(request, resp);
+			} else {
+				request.setAttribute("errorMsg", "Sorry, we could not find this student!");
+				request.getRequestDispatcher("/error.jsp").forward(request, resp);
+			}
+			
 		}
 		
 			

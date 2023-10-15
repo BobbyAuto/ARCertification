@@ -109,7 +109,6 @@ public class VerifyPreviousScoresServlet extends HttpServlet {
             					Security se = new Security(pastBu.getLecturerID());
             					if(se.verifySignature(pastBu.getSignature(), pastBu.getMessage())) {
             						
-            						
             						System.out.println("--------- Verify Previous Scores Passed! --------");
                             		request.getRequestDispatcher("/BuildAndAddBlockServlet").forward(request, resp);
             					}
