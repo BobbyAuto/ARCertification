@@ -49,6 +49,10 @@ h2 {
 			<input type="text" name="studentId"/>
 		</div>
 		
+		<div class="tpSub">
+			<div class="tpSubText">Access Code:</div>
+			<input type="text" name="accessCode"/>
+		</div>
 		
 		<input id="type" type="hidden" name="type" value="<%=request.getParameter("type")%>"/>
 		<input id="submit" type="submit" value="Submit"/>

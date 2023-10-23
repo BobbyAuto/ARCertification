@@ -48,7 +48,7 @@ $(document).ready(function(){
 				<button id="login">Login</button>
 			</div>
 			
-			<!-- hidden field to store the lecturer's signature -->
+			
 			<input id="type" type="hidden" name="type" value="<%=request.getParameter("type")%>"/>
 			
 		</form>

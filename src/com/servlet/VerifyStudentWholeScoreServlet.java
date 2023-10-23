@@ -98,7 +98,7 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				// --- 1.--- verify the hash of the container of subjectChildren
 				if (hos.getHash().equals(bu.getBlockHash()) == false) {
 					markSheetsList = null;
-					isPassed = false;
+					isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
 					break;
 				}
 
@@ -107,7 +107,7 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 					BlockUnit buNext = blockContainer.get(i + 1);
 					if (new HashObjectWithSHA256(bu).getHash().equals(buNext.getPreviousHash()) == false) {
 						markSheetsList = null;
-						isPassed = false;
+						isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
 						break;
 					}
 				}
@@ -117,7 +117,7 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				String message = bu.getMessage();
 				if (se.verifySignature(bu.getSignature(), message) == false) {
 					markSheetsList = null;
-					isPassed = false;
+					isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
 					break;
 				}
 
@@ -128,7 +128,7 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				float score_course = subjectChildren.get(subjectChildren.size()-1).getScore();
 				if(score_msg != score_course) {
 					markSheetsList = null;
-					isPassed = false;
+					isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
 					break;
 				}
 				
@@ -154,6 +154,18 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		this.doGet(request, response);
+	}
+	
+	/**
+	 * Try to recover the tampered data.
+	 * @param latestVersion 
+	 * @param currentVersion 
+	 * @param studentID 
+	 * @return
+	 */
+	protected boolean tryToRecover(int studentID, int currentVersion, int latestVersion) {
+		return false;
+		
 	}
 
 }

@@ -72,13 +72,7 @@ public class LoginDispatcherServlet extends HttpServlet {
 				request.setAttribute("errorMsg", "Sorry, we could not find this student!");
 				request.getRequestDispatcher("/error.jsp").forward(request, resp);
 			}
-			
 		}
-		
-			
-		
-		
-
 	}
 
 	/**
