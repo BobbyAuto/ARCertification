@@ -24,11 +24,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.assign.blockchain.BlockUnit;
 import com.assign.blockchain.MarkSheet;
+import com.assign.blockchain.WriteBlockContainerToFile;
 import com.assign.dao.BQuery;
 import com.assign.dao.HashObjectWithSHA256;
 import com.assign.dao.LecturerDao;
 import com.assign.dao.Security;
 import com.assign.dao.StudentDao;
+import com.assign.dao.VerificationResult;
 import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
 
@@ -57,18 +59,26 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 		System.out.println("======== VerifyStudentWholeScoreServlet ======== ");
 
 		ServletContext servletContext = getServletContext();
-		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
+		String contextPath = servletContext.getRealPath("/");
+        
+        WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath);
+        ArrayList<BlockUnit> blockContainer = wbct.readBlockContainer();
+		
+		
+//		ArrayList<BlockUnit> blockContainer = (ArrayList) servletContext.getAttribute("blockContainer");
 
 		if (blockContainer.isEmpty()) {
 
 		} else {
-			ArrayList<MarkSheet> markSheetsList = verifyStudentInterity(student, blockContainer);
+			VerificationResult veriResult = verifyStudentInterity(student, blockContainer);
+//			ArrayList<MarkSheet> markSheetsList = veriResult.getMarkSheetsList();
 			request.setAttribute("student", student);
-			if (markSheetsList == null) {
-				request.setAttribute("verifyStatus", "<span style='color:red;'>Verification Failed</span>");
+			if (veriResult.isPassed() == false) {
+				request.setAttribute("verifyStatus", "<span style='color:red;'>Verification Failed!!</span>");
+				request.setAttribute("veriResult", veriResult);
 			} else {
 				request.setAttribute("verifyStatus", "<span style='color:green;'>Verification Successful</span>");
-				request.setAttribute("markSheetsList", markSheetsList);
+				request.setAttribute("veriResult", veriResult);
 			}
 		}
 
@@ -83,12 +93,14 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 	 * @param blockContainer
 	 * @return a MarkSheet ArrayList if verification pass, otherwise return null.
 	 */
-	private ArrayList<MarkSheet> verifyStudentInterity(Student student, ArrayList<BlockUnit> blockContainer) {
+	private VerificationResult verifyStudentInterity(Student student, ArrayList<BlockUnit> blockContainer) {
 		ArrayList<MarkSheet> markSheetsList = null;
-		boolean isPassed = true;
 
 		int latestVersion = student.getLatestVersion();
 		int studentID = student.getStudentID();
+		
+		VerificationResult vr = new VerificationResult();
+		vr.setPassed(true);
 
 		for (int i = 0; i < blockContainer.size(); i++) {
 			BlockUnit bu = blockContainer.get(i);
@@ -97,17 +109,22 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
 				// --- 1.--- verify the hash of the container of subjectChildren
 				if (hos.getHash().equals(bu.getBlockHash()) == false) {
-					markSheetsList = null;
-					isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+					
+					boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+					vr.setPassed(isPassed);
+					vr.setMarkSheetsList(subjectChildren);
 					break;
 				}
 
-				// --- 2.--- verify the hash of current block header is equals with the previous hash in the next block header.
+				// --- 2.--- verify the hash of current block header is equals with the previous hash in 
+				// the next block header.
 				if (i + 1 < blockContainer.size()) {
 					BlockUnit buNext = blockContainer.get(i + 1);
 					if (new HashObjectWithSHA256(bu).getHash().equals(buNext.getPreviousHash()) == false) {
-						markSheetsList = null;
-						isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+						
+						boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+						vr.setPassed(isPassed);
+						vr.setMarkSheetsList(subjectChildren);
 						break;
 					}
 				}
@@ -116,8 +133,10 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				Security se = new Security(bu.getLecturerID());
 				String message = bu.getMessage();
 				if (se.verifySignature(bu.getSignature(), message) == false) {
-					markSheetsList = null;
-					isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+					
+					boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+					vr.setPassed(isPassed);
+					vr.setMarkSheetsList(subjectChildren);
 					break;
 				}
 
@@ -127,23 +146,26 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				float score_msg = Float.parseFloat(msgFragment[msgFragment.length - 1]);
 				float score_course = subjectChildren.get(subjectChildren.size()-1).getScore();
 				if(score_msg != score_course) {
-					markSheetsList = null;
-					isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+					
+					boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
+					vr.setPassed(isPassed);
+					vr.setMarkSheetsList(subjectChildren);
 					break;
 				}
 				
 
 				if (bu.getLatestVersion() == latestVersion) {
-					markSheetsList = subjectChildren;
+					vr.setMarkSheetsList(subjectChildren);
+					
 					break;
 				} else {
-					markSheetsList = subjectChildren;
+					
 					continue;
 				}
 
 			}
 		}
-		return markSheetsList;
+		return vr;
 	}
 
 	/**

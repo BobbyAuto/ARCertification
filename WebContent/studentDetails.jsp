@@ -4,6 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.assign.blockchain.MarkSheet" %>
 <%@ page import="com.assign.entites.Student" %>   
+<%@ page import="com.assign.dao.VerificationResult" %> 
 
 
 <!DOCTYPE html>
@@ -40,6 +41,7 @@
 	<table id="tbDetails">
 		<thead>
 			<tr>
+				<th>Index</th>
 				<th>Subject Code</th>
 				<th>Subject</th>
 				<th>Score</th>
@@ -47,18 +49,32 @@
 		</thead>
 		<tbody>
 			<%
-			ArrayList<MarkSheet> markSheetsList = (ArrayList<MarkSheet>) request.getAttribute("markSheetsList");
+			
+			VerificationResult veriResult = (VerificationResult) request.getAttribute("veriResult");
+			ArrayList<MarkSheet> markSheetsList = veriResult.getMarkSheetsList();
+			boolean isPass = veriResult.isPassed();
 			for(int i=0; i<markSheetsList.size(); i++) {
 				MarkSheet markSheet = markSheetsList.get(i);
 				String[] text = markSheet.getSubjectText().split("-");
-				
+				if (isPass == false && i == markSheetsList.size()-1) {
+					%>
+					<tr style='color: red;'>
+						<td><%=i+1 %></td>
+						<td><%=text[0] %></td>
+						<td><%=text[1] %></td>
+						<td><%=markSheet.getScore() %></td>
+					</tr>
+					<%
+				} else {
 				%>
 				<tr>
+					<td><%=i+1 %></td>
 					<td><%=text[0] %></td>
 					<td><%=text[1] %></td>
 					<td><%=markSheet.getScore() %></td>
 				</tr>
 				<%
+				}
 			}
 			%>
 		</tbody>
