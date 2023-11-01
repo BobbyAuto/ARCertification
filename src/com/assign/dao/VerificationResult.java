@@ -9,8 +9,9 @@ import com.assign.blockchain.MarkSheet;
  */
 public class VerificationResult {
 
-	private ArrayList<MarkSheet> markSheetsList = null;
+	private ArrayList<MarkSheet> markSheetsList = new ArrayList<MarkSheet>();
 	private boolean isPassed = false;
+	private int tamperedVersion = -1; // the latestVersion number in the block header, which is tampered with.
 	
 	public ArrayList<MarkSheet> getMarkSheetsList() {
 		return markSheetsList;
@@ -24,6 +25,12 @@ public class VerificationResult {
 	}
 	public void setPassed(boolean isPassed) {
 		this.isPassed = isPassed;
+	}
+	public int getTamperedVersion() {
+		return tamperedVersion;
+	}
+	public void setTamperedVersion(int tamperedVersion) {
+		this.tamperedVersion = tamperedVersion;
 	}
 	
 	

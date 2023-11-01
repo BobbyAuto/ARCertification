@@ -40,6 +40,10 @@ import com.assign.entites.Student;
 @WebServlet("/VerifyStudentWholeScoreServlet")
 public class VerifyStudentWholeScoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	
+	private String contextPath;
+	private boolean doTrytoRecover = true;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -59,9 +63,9 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 		System.out.println("======== VerifyStudentWholeScoreServlet ======== ");
 
 		ServletContext servletContext = getServletContext();
-		String contextPath = servletContext.getRealPath("/");
+		this.contextPath = servletContext.getRealPath("/");
         
-        WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(contextPath);
+        WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(this.contextPath);
         ArrayList<BlockUnit> blockContainer = wbct.readBlockContainer();
 		
 		
@@ -94,7 +98,6 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 	 * @return a MarkSheet ArrayList if verification pass, otherwise return null.
 	 */
 	private VerificationResult verifyStudentInterity(Student student, ArrayList<BlockUnit> blockContainer) {
-		ArrayList<MarkSheet> markSheetsList = null;
 
 		int latestVersion = student.getLatestVersion();
 		int studentID = student.getStudentID();
@@ -106,14 +109,34 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 			BlockUnit bu = blockContainer.get(i);
 			if (bu.getStudentID() == studentID) {
 				ArrayList<MarkSheet> subjectChildren = bu.getSubjectChildren();
+				MarkSheet markSheet = subjectChildren.get(subjectChildren.size()-1); // get the last mark sheet.
+				
+				if (bu.getLatestVersion() == latestVersion) {
+					vr.getMarkSheetsList().add(markSheet);
+					
+					// if the verification is failed, go to recovery module.
+					if(vr.isPassed() == false) { 
+						if(this.tryToRecover(student, vr.getTamperedVersion(), latestVersion, blockContainer) == true) { // if successfully recovered, then go to verify again.
+							vr = verifyStudentInterity(student, blockContainer);
+						}
+					}
+					
+					break;
+				} 
+				
+				
 				HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
 				// --- 1.--- verify the hash of the container of subjectChildren
 				if (hos.getHash().equals(bu.getBlockHash()) == false) {
 					
-					boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
-					vr.setPassed(isPassed);
-					vr.setMarkSheetsList(subjectChildren);
-					break;
+					vr.setPassed(false);
+					vr.getMarkSheetsList().add(markSheet);
+					
+					if(vr.getTamperedVersion() == -1) {
+						vr.setTamperedVersion(bu.getLatestVersion());
+					}
+					
+					continue;
 				}
 
 				// --- 2.--- verify the hash of current block header is equals with the previous hash in 
@@ -122,10 +145,12 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 					BlockUnit buNext = blockContainer.get(i + 1);
 					if (new HashObjectWithSHA256(bu).getHash().equals(buNext.getPreviousHash()) == false) {
 						
-						boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
-						vr.setPassed(isPassed);
-						vr.setMarkSheetsList(subjectChildren);
-						break;
+						vr.setPassed(false);
+						vr.getMarkSheetsList().add(markSheet);
+						if(vr.getTamperedVersion() == -1) {
+							vr.setTamperedVersion(bu.getLatestVersion());
+						}
+						continue;
 					}
 				}
 				
@@ -133,11 +158,13 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				Security se = new Security(bu.getLecturerID());
 				String message = bu.getMessage();
 				if (se.verifySignature(bu.getSignature(), message) == false) {
-					
-					boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
-					vr.setPassed(isPassed);
-					vr.setMarkSheetsList(subjectChildren);
-					break;
+
+					vr.setPassed(false);
+					vr.getMarkSheetsList().add(markSheet);
+					if(vr.getTamperedVersion() == -1) {
+						vr.setTamperedVersion(bu.getLatestVersion());
+					}
+					continue;
 				}
 
 				// --- 4.--- compare if the score involved in the message, is equal to the score
@@ -147,22 +174,16 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 				float score_course = subjectChildren.get(subjectChildren.size()-1).getScore();
 				if(score_msg != score_course) {
 					
-					boolean isPassed = this.tryToRecover(studentID, bu.getLatestVersion(), latestVersion);
-					vr.setPassed(isPassed);
-					vr.setMarkSheetsList(subjectChildren);
-					break;
-				}
-				
-
-				if (bu.getLatestVersion() == latestVersion) {
-					vr.setMarkSheetsList(subjectChildren);
-					
-					break;
-				} else {
-					
+					vr.setPassed(false);
+					vr.getMarkSheetsList().add(markSheet);
+					if(vr.getTamperedVersion() == -1) {
+						vr.setTamperedVersion(bu.getLatestVersion());
+					}
 					continue;
 				}
-
+				
+				vr.getMarkSheetsList().add(markSheet);
+				
 			}
 		}
 		return vr;
@@ -185,8 +206,56 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 	 * @param studentID 
 	 * @return
 	 */
-	protected boolean tryToRecover(int studentID, int currentVersion, int latestVersion) {
-		return false;
+	protected boolean tryToRecover(Student student, int currentVersion, int latestVersion, ArrayList<BlockUnit> blockContainer) {
+		int studentID = student.getStudentID();
+		boolean isrecovered = true;
+		
+		// if the recovery module is disabled, then return false
+		if (this.doTrytoRecover == false) { 
+			isrecovered = false;
+			
+		// start the recovery process
+		} else {
+			System.out.println("start trying to recovery....");
+			for (int i = 0; i < blockContainer.size(); i++) {
+				BlockUnit bu = blockContainer.get(i);
+				//find the related block, which is tampered with.
+				if (bu.getStudentID() == studentID && bu.getLatestVersion() == currentVersion) { 
+					Security se = new Security(bu.getLecturerID());
+					String message = bu.getMessage();
+					// if signature is integrity, then recover the score from message.
+					if (se.verifySignature(bu.getSignature(), message) == true) {
+						String[] messageFragment = message.split("-");
+						float messageScore = Float.parseFloat(messageFragment[messageFragment.length-1]);
+						
+						ArrayList<MarkSheet> subjectChildren = bu.getSubjectChildren();
+						MarkSheet markSheet = subjectChildren.get(subjectChildren.size()-1); // get the last mark sheet.
+						markSheet.setScore(messageScore);
+						
+						HashObjectWithSHA256 hos = new HashObjectWithSHA256(subjectChildren);
+						// --- 1.--- check the hash of the container of subjectChildren
+						if (hos.getHash().equals(bu.getBlockHash()) == true) {
+							// write data into file.
+							WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(this.contextPath, blockContainer);
+							wbct.writeBlockContainer();
+							
+							System.out.println("recovery finished.");
+						} else {
+							isrecovered = false;
+						}
+						
+						
+						break;
+					} else {
+						isrecovered = false;
+					}
+				}
+			}
+		}
+		
+
+		return isrecovered;
+		
 		
 	}
 

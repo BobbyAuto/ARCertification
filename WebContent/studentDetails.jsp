@@ -56,7 +56,7 @@
 			for(int i=0; i<markSheetsList.size(); i++) {
 				MarkSheet markSheet = markSheetsList.get(i);
 				String[] text = markSheet.getSubjectText().split("-");
-				if (isPass == false && i == markSheetsList.size()-1) {
+				if (isPass == false && i == veriResult.getTamperedVersion()-1) {
 					%>
 					<tr style='color: red;'>
 						<td><%=i+1 %></td>

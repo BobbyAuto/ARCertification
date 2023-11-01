@@ -38,7 +38,8 @@ public class Attacker {
 				System.out.println("target found.");
 				
 				ArrayList<MarkSheet> courseContainer = bu.getSubjectChildren();
-				MarkSheet ms = courseContainer.get(courseContainer.size() - 1);
+//				MarkSheet ms = courseContainer.get(courseContainer.size() - 1);
+				MarkSheet ms = courseContainer.get(0);
 //				ms.setScore(83);
 				ms.setScore(60);
 				

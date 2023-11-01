@@ -21,7 +21,7 @@ public class BlockUnit implements Serializable{
 	private int subjectID;
 	private int lecturerID;
 	
-	String message; 
+	String message; //structure: lecturerID-subjectID-studentID-numericMark
 	String signature;
 	
 	private ArrayList<MarkSheet> subjectChildren = new ArrayList<MarkSheet>(); // store all subject which was marked and already belonged to a block.
