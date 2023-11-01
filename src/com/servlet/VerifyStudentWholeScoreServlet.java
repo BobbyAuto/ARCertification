@@ -1,20 +1,7 @@
 package com.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.spec.X509EncodedKeySpec;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Base64;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,13 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.assign.blockchain.BlockUnit;
 import com.assign.blockchain.MarkSheet;
 import com.assign.blockchain.WriteBlockContainerToFile;
-import com.assign.dao.BQuery;
 import com.assign.dao.HashObjectWithSHA256;
-import com.assign.dao.LecturerDao;
 import com.assign.dao.Security;
-import com.assign.dao.StudentDao;
 import com.assign.dao.VerificationResult;
-import com.assign.entites.Lecturer;
 import com.assign.entites.Student;
 
 /**
