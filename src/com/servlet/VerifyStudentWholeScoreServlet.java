@@ -99,6 +99,7 @@ public class VerifyStudentWholeScoreServlet extends HttpServlet {
 					
 					// if the verification is failed, go to recovery module.
 					if(vr.isPassed() == false) { 
+						System.out.println("a course data was tampered with !!");
 						if(this.tryToRecover(student, vr.getTamperedVersion(), latestVersion, blockContainer) == true) { // if successfully recovered, then go to verify again.
 							vr = verifyStudentInterity(student, blockContainer);
 						}

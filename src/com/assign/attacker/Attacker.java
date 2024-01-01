@@ -41,7 +41,7 @@ public class Attacker {
 //				MarkSheet ms = courseContainer.get(courseContainer.size() - 1);
 				MarkSheet ms = courseContainer.get(0);
 //				ms.setScore(83);
-				ms.setScore(60);
+				ms.setScore(96);
 				
 				WriteBlockContainerToFile wbct = new WriteBlockContainerToFile(this.contextPath, this.blockContainer);
 				wbct.writeBlockContainer();
